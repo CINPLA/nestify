@@ -89,7 +89,6 @@ DISTFILES += \
     snapcraft.yaml \
     ios/iOS.plist \
     .travis/qt5-mac.sh \
-    .travis.sh \
     .snapcraft/snapcraft.yaml \
     .snapcraft/parts/plugins/x-qt57.py \
     installer/config.xml \

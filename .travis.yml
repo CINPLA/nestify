@@ -33,15 +33,16 @@ matrix:
     sudo: required
     services: docker
     install:
-    - docker run -v $(pwd):/app snapcore/snapcraft bash -c "cd /app/ && .travis/ubuntu.sh"
+    - docker
+    - docker run -v $(pwd):/app ubuntu:16.04 bash -c "cd /app/ && bash -ex .travis/ubuntu.sh"
     after_success:
     - openssl aes-256-cbc -K $encrypted_8bc7dae8784d_key -iv $encrypted_8bc7dae8784d_iv
       -in .snapcraft/.snapcraft/travis_snapcraft.cfg -out .snapcraft/.snapcraft/snapcraft.cfg -d
     deploy:
       'on':
-        branch: dev # TODO add back when merged into dev
+        branch: dev
       provider: script
-      script: docker run -v $(pwd):/app snapcore/snapcraft bash -c "cd /app/.snapcraft && snapcraft && snapcraft push *.snap --release edge"
+      script: docker run -v $(pwd):/app ubuntu:16.04 bash -c "cd /app/.snapcraft && snapcraft && snapcraft push *.snap --release edge"
       skip_cleanup: true
 script:
 - echo "Finished"
