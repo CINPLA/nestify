@@ -1,1 +1,220 @@
-{"edges":[{"filename":"Edge.qml","from":3,"savedProperties":{"filename":"Edge.qml"},"to":2},{"filename":"Edge.qml","from":4,"savedProperties":{"filename":"Edge.qml"},"to":0},{"filename":"Edge.qml","from":8,"savedProperties":{"filename":"Edge.qml"},"to":1},{"filename":"edges/MeterEdge.qml","from":5,"savedProperties":{"filename":"edges/MeterEdge.qml"},"to":2},{"filename":"edges/MeterEdge.qml","from":7,"savedProperties":{"filename":"edges/MeterEdge.qml"},"to":0},{"filename":"edges/MeterEdge.qml","from":6,"savedProperties":{"filename":"edges/MeterEdge.qml"},"to":1}],"fileFormatVersion":4,"nodes":[{"filename":"neurons/LeakyNeuron.qml","savedProperties":{"engine":{"capacitance":9.999999999999999e-10,"fireOutput":0.00019999999999999998,"initialPotential":0,"maximumVoltage":0.06,"minimumVoltage":-0.09,"restingPotential":0,"threshold":0.020000000000000004,"voltage":0.018579150989776978,"voltageClamped":true,"refractoryPeriod":0,"resistance":10000000},"inhibitory":false,"label":"","x":480,"y":288}},{"filename":"neurons/LeakyNeuron.qml","savedProperties":{"engine":{"capacitance":9.999999999999999e-10,"fireOutput":0.00019999999999999998,"initialPotential":0,"maximumVoltage":0.06,"minimumVoltage":-0.09,"restingPotential":0,"threshold":0.020000000000000004,"voltage":0.014576124308745613,"voltageClamped":true,"refractoryPeriod":0,"resistance":10000000},"inhibitory":false,"label":"","x":480,"y":512}},{"filename":"neurons/LeakyNeuron.qml","savedProperties":{"engine":{"capacitance":9.999999999999999e-10,"fireOutput":0.00019999999999999998,"initialPotential":0,"maximumVoltage":0.06,"minimumVoltage":-0.09,"restingPotential":0,"threshold":0.020000000000000004,"voltage":0.017999992150682296,"voltageClamped":true,"refractoryPeriod":0,"resistance":10000000},"inhibitory":false,"label":"","x":480,"y":64}},{"filename":"generators/CurrentClamp.qml","savedProperties":{"engine":{"currentOutput":1.8e-9},"inhibitory":false,"label":"","x":320,"y":64}},{"filename":"generators/CurrentClamp.qml","savedProperties":{"engine":{"currentOutput":2.02e-9},"inhibitory":false,"label":"","x":320,"y":288}},{"filename":"meters/Voltmeter.qml","savedProperties":{"engine":{},"inhibitory":false,"label":"","x":640,"y":0,"height":199.65449138498548,"maximumValue":30.329999999999984,"minimumValue":0,"width":327.38734648475645}},{"filename":"meters/Voltmeter.qml","savedProperties":{"engine":{},"inhibitory":false,"label":"","x":640,"y":448,"height":214.48275862068954,"maximumValue":30.329999999999984,"minimumValue":0,"width":335.6425506798937}},{"filename":"meters/Voltmeter.qml","savedProperties":{"engine":{},"inhibitory":false,"label":"","x":640,"y":224,"height":210.9618396858187,"maximumValue":30.329999999999984,"minimumValue":0,"width":332.7652039681277}},{"filename":"generators/CurrentClamp.qml","savedProperties":{"engine":{"currentOutput":2.2e-9},"inhibitory":false,"label":"","x":320,"y":512}},{"filename":"annotations/Note.qml","savedProperties":{"inhibitory":false,"label":"","x":1016,"y":109,"height":470,"text":"The level of current injection must be high enough to bring the membrane potential to the firing threshold, otherwise the cell will not fire.\n\nAbove the firing threshold, higher level of current injection causes firing at a higher frequency.\n\nThis example is from chapter 8 (figure 8.5a) in Principles of Computational Modelling in Neuroscience. Sterratt, David. Cambridge: Cambridge UP, 2011.","width":346}}],"workspace":{"playbackSpeed":2,"visibleRectangle":{"height":842.7263586812722,"width":1493.5056840279644,"x":131.87906128971252,"y":-116.84233435043635}}}
+{
+  "edges": [
+    {
+      "filename": "Edge.qml",
+      "from": 3,
+      "savedProperties": {
+        "filename": "Edge.qml"
+      },
+      "to": 2
+    },
+    {
+      "filename": "Edge.qml",
+      "from": 4,
+      "savedProperties": {
+        "filename": "Edge.qml"
+      },
+      "to": 0
+    },
+    {
+      "filename": "Edge.qml",
+      "from": 8,
+      "savedProperties": {
+        "filename": "Edge.qml"
+      },
+      "to": 1
+    },
+    {
+      "filename": "edges/MeterEdge.qml",
+      "from": 5,
+      "savedProperties": {
+        "filename": "edges/MeterEdge.qml"
+      },
+      "to": 2
+    },
+    {
+      "filename": "edges/MeterEdge.qml",
+      "from": 7,
+      "savedProperties": {
+        "filename": "edges/MeterEdge.qml"
+      },
+      "to": 0
+    },
+    {
+      "filename": "edges/MeterEdge.qml",
+      "from": 6,
+      "savedProperties": {
+        "filename": "edges/MeterEdge.qml"
+      },
+      "to": 1
+    }
+  ],
+  "fileFormatVersion": 4,
+  "nodes": [
+    {
+      "filename": "neurons/LeakyNeuron.qml",
+      "savedProperties": {
+        "engine": {
+          "capacitance": 9.999999999999999e-10,
+          "fireOutput": 0.00019999999999999998,
+          "initialPotential": 0,
+          "maximumVoltage": 0.06,
+          "minimumVoltage": -0.09,
+          "restingPotential": 0,
+          "threshold": 0.020000000000000004,
+          "voltage": 0.018579150989776978,
+          "voltageClamped": true,
+          "refractoryPeriod": 0,
+          "resistance": 10000000
+        },
+        "inhibitory": false,
+        "label": "",
+        "x": 480,
+        "y": 288
+      }
+    },
+    {
+      "filename": "neurons/LeakyNeuron.qml",
+      "savedProperties": {
+        "engine": {
+          "capacitance": 9.999999999999999e-10,
+          "fireOutput": 0.00019999999999999998,
+          "initialPotential": 0,
+          "maximumVoltage": 0.06,
+          "minimumVoltage": -0.09,
+          "restingPotential": 0,
+          "threshold": 0.020000000000000004,
+          "voltage": 0.014576124308745613,
+          "voltageClamped": true,
+          "refractoryPeriod": 0,
+          "resistance": 10000000
+        },
+        "inhibitory": false,
+        "label": "",
+        "x": 480,
+        "y": 512
+      }
+    },
+    {
+      "filename": "neurons/LeakyNeuron.qml",
+      "savedProperties": {
+        "engine": {
+          "capacitance": 9.999999999999999e-10,
+          "fireOutput": 0.00019999999999999998,
+          "initialPotential": 0,
+          "maximumVoltage": 0.06,
+          "minimumVoltage": -0.09,
+          "restingPotential": 0,
+          "threshold": 0.020000000000000004,
+          "voltage": 0.017999992150682296,
+          "voltageClamped": true,
+          "refractoryPeriod": 0,
+          "resistance": 10000000
+        },
+        "inhibitory": false,
+        "label": "",
+        "x": 480,
+        "y": 64
+      }
+    },
+    {
+      "filename": "generators/CurrentClamp.qml",
+      "savedProperties": {
+        "engine": {
+          "currentOutput": 1.8e-09
+        },
+        "inhibitory": false,
+        "label": "",
+        "x": 320,
+        "y": 64
+      }
+    },
+    {
+      "filename": "generators/CurrentClamp.qml",
+      "savedProperties": {
+        "engine": {
+          "currentOutput": 2.02e-09
+        },
+        "inhibitory": false,
+        "label": "",
+        "x": 320,
+        "y": 288
+      }
+    },
+    {
+      "filename": "meters/Voltmeter.qml",
+      "savedProperties": {
+        "engine": {},
+        "inhibitory": false,
+        "label": "",
+        "x": 640,
+        "y": 0,
+        "height": 199.65449138498548,
+        "maximumValue": 30.329999999999984,
+        "minimumValue": 0,
+        "width": 327.38734648475645
+      }
+    },
+    {
+      "filename": "meters/Voltmeter.qml",
+      "savedProperties": {
+        "engine": {},
+        "inhibitory": false,
+        "label": "",
+        "x": 640,
+        "y": 448,
+        "height": 214.48275862068954,
+        "maximumValue": 30.329999999999984,
+        "minimumValue": 0,
+        "width": 335.6425506798937
+      }
+    },
+    {
+      "filename": "meters/Voltmeter.qml",
+      "savedProperties": {
+        "engine": {},
+        "inhibitory": false,
+        "label": "",
+        "x": 640,
+        "y": 224,
+        "height": 210.9618396858187,
+        "maximumValue": 30.329999999999984,
+        "minimumValue": 0,
+        "width": 332.7652039681277
+      }
+    },
+    {
+      "filename": "generators/CurrentClamp.qml",
+      "savedProperties": {
+        "engine": {
+          "currentOutput": 2.2e-09
+        },
+        "inhibitory": false,
+        "label": "",
+        "x": 320,
+        "y": 512
+      }
+    },
+    {
+      "filename": "annotations/Note.qml",
+      "savedProperties": {
+        "inhibitory": false,
+        "label": "",
+        "x": 1016,
+        "y": 0,
+        "height": 670,
+        "text": "The level of current injection must be high enough to bring the membrane potential to the firing threshold, otherwise the cell will not fire.\n\nAbove the firing threshold, higher level of current injection causes firing at a higher frequency.\n\nNote that the resting potential and firing threshold in this example is artificial and set to 0 mV and +20 mV, respectively. A set of more biologically plausible values would be -65 mV for the resting potential and -50 mV for the firing threshold.\n\nThis example is from chapter 8 (figure 8.5a) in Principles of Computational Modelling in Neuroscience. Sterratt, David. Cambridge: Cambridge UP, 2011.",
+        "width": 346
+      }
+    }
+  ],
+  "workspace": {
+    "playbackSpeed": 2,
+    "visibleRectangle": {
+      "height": 842.7263586812722,
+      "width": 1493.5056840279644,
+      "x": 131.87906128971252,
+      "y": -116.84233435043635
+    }
+  }
+}
