@@ -5,14 +5,11 @@ branches:
 matrix:
   include:
   - os: osx
-    osx_image: xcode7.3
+    osx_image: xcode10.2
     before_install:
     - brew update
-    - brew install p7zip
-    - bash .travis/qt5-mac.sh $(pwd) extra-charts 3d base declarative graphicaleffects
-      imageformats macextras multimedia quickcontrols quickcontrols2 sensors svg tools
-      translations xmlpatterns
-    - export PATH=$(pwd)/5.7/clang_64/bin:$PATH
+    - brew install qt5
+    - brew link qt5 --force
     before_deploy:
     - git clone https://github.com/iltommi/macdeployqtfix.git
     - python macdeployqtfix/macdeployqtfix.py neuronify.app/Contents/MacOS/neuronify
