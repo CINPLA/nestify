@@ -1,10 +1,13 @@
 image:
   - Visual Studio 2017
 install:
-  - dir C:\Qt\Tools\QtInstallerFramework\3.1\bin
-  - dir C:\Qt\5.12.4\msvc2017_64\bin
-  - set QTDIR=C:\Qt\5.12.4\msvc2017_64
-  - set PATH=%PATH%;%QTDIR%\bin;C:\Qt\QtIFW2.0.1\bin;C:\Qt\Tools\QtInstallerFramework\3.1\bin
+  - set QTDIR=C:\Qt\5.13.2\msvc2017_64
+  - set QT_INSTALLER_FRAMEWORK_DIR=C:\Qt\Tools\QtInstallerFramework\3.1\bin
+  - set PATH=%PATH%;%QTDIR%\bin;%QT_INSTALLER_FRAMEWORK_DIR%;C:\Qt\QtIFW2.0.1\bin
+  - echo %QTDIR%
+  - dir %QTDIR%
+  - echo %QT_INSTALLER_FRAMEWORK_DIR%
+  - dir %QT_INSTALLER_FRAMEWORK_DIR%
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - cmd: pip.exe install conan
   - cmd: conan user
