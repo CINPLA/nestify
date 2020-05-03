@@ -10,7 +10,7 @@ import QtCharts 2.1
 import QtMultimedia 5.5
 import Qt.labs.settings 1.0
 import Qt.labs.folderlistmodel 2.1
-import Qt.labs.platform 1.0
+import Qt.labs.platform 1.0 as Platform
 
 import Neuronify 1.0
 import CuteVersioning 1.0
@@ -107,9 +107,9 @@ Item {
             }
         }
         
-        FileDialog {
+        Platform.FileDialog {
             id: saveDialog
-            fileMode: FileDialog.SaveFile
+            fileMode: Platform.FileDialog.SaveFile
             nameFilters: ["Neuronify files (*.neuronify)"]
             defaultSuffix: ".neuronify"
             onAccepted: {
