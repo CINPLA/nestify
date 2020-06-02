@@ -31,8 +31,9 @@ matrix:
     script:
     - docker run -v $(pwd):/app -t neuronify bash -ex .travis/ubuntu.sh
     deploy:
-      #on:
+      on:
         #tags: true
+        all_branches: true
       provider: snap
       snap: "neuronify*.snap"
       channel: edge
