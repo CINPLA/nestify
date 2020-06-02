@@ -11,4 +11,3 @@ cp -r $QTDIR/plugins ${SNAP_DUMP}/
 cp -r $QTDIR/plugins/platforms ${SNAP_DUMP}/
 cp -r $QTDIR/qml ${SNAP_DUMP}/
 cp neuronify ${SNAP_DUMP}/bin/neuronify
-snapcraft
