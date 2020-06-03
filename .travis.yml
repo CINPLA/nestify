@@ -35,7 +35,7 @@ matrix:
         #tags: true
         all_branches: true
       provider: script
-      script: docker run -v $(pwd):/app -t neuronify bash -ex .travis/ubuntu-publish-snap.sh
+      script: docker run -v $(pwd):/app -t neuronify bash -c "cd /app/ && echo '$SNAP_TOKEN' | snapcraft login --with - && snapcraft && snapcraft push *.snap --release edge"
       skip_cleanup: true
 script:
 - echo "Finished"
