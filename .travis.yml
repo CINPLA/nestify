@@ -38,8 +38,9 @@ matrix:
     - docker run -v $(pwd):/app -t neuronify bash -c "cd /app/ && snapcraft"
     deploy:
       on:
-        #tags: true
-        all_branches: true
+        branch:
+        - master
+        - /^release\/.*$/
       provider: snap
       snap: neuronify*.snap
       channel: edge
