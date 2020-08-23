@@ -166,7 +166,7 @@ Edge {
 
             Connections {
                 target: engine
-                onStepped: {
+                function onStepped() {
                     var duration = Math.max(240, delay / (root.timeStep * root.playbackSpeed) * 16)
                     var currentTime = Date.now()
                     var delta = currentTime - previousTime
