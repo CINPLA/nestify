@@ -128,3 +128,48 @@ QObject* FileIO::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine)
 
     return new FileIO;
 }
+
+
+FileTextStreamOut::FileTextStreamOut(QObject *parent)
+    : QObject(parent)
+{
+}
+
+QUrl FileTextStreamOut::fileName() const
+{
+    return m_fileName;
+}
+
+void FileTextStreamOut::setFileName(QUrl fileName)
+{
+    if (m_fileName == fileName)
+        return;
+
+    m_fileName = fileName;
+
+    emit fileNameChanged(m_fileName);
+}
+
+void FileTextStreamOut::write(const QByteArray &text)
+{
+    if (!m_fileName.isValid()) {
+        qWarning() << "Filename not valid:" << m_fileName;
+        return;
+    }
+
+    QString path = QQmlFile::urlToLocalFileOrQrc(m_fileName);
+
+    if (!m_file || m_file.value()->fileName() != path) {
+        qDebug() << "Opening" << path << "for reading";
+        m_file = std::make_unique<QFile>(path);
+        const auto opened = m_file.value()->open(QIODevice::WriteOnly | QIODevice::Append);
+        if (!opened) {
+            qWarning() << "Could not open file:" << path;
+            m_file = std::nullopt;
+            return;
+        }
+    }
+
+    m_file.value()->write(text);
+    m_file.value()->flush();
+}

@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QUrl>
 #include <QJSValue>
+#include <QFile>
+#include <memory>
+#include <optional>
 
 class QQmlEngine;
 
@@ -24,6 +27,29 @@ public:
     Q_INVOKABLE static void getOpenFileContent(QJSValue callback);
 
     static QObject *qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
+};
+
+class FileTextStreamOut : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QUrl fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
+
+public:
+    explicit FileTextStreamOut(QObject *parent = nullptr);
+
+    QUrl fileName() const;
+
+public slots:
+    void setFileName(QUrl fileName);
+    void write(const QByteArray &text);
+
+signals:
+    void fileNameChanged(QUrl fileName);
+
+private:
+    std::optional<std::unique_ptr<QFile>> m_file;
+
+    QUrl m_fileName;
 };
 
 #endif // FILEIO_H

@@ -31,6 +31,7 @@ Node {
     square: true
     name: "Voltmeter"
 
+    property string label: ""
     property var connectionPlots: []
     property var colors: ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3",
         "#ff7f00", "#a65628", "#f781bf", "#999999"]
@@ -65,6 +66,29 @@ Node {
     property real realTime: 0.0
     property int numberOfEdges: 0
 
+    property int stopped: 0
+    property int recording: 1
+    property int error: 2
+
+    property int recordingState: stopped
+
+    function startRecording() {
+        const callback = (folder) => {
+            const prefix = new Date().toISOString().split(".")[0].replace(/:/g, "");
+            const suffix = "csv";
+            const sanitizedLabel = label.replace(' ', '_').replace(/\W/g, '');
+            const componentLabel = sanitizedLabel.length > 0 ? sanitizedLabel : "voltmeter";
+            recorder.fileName = Qt.resolvedUrl(`${folder}/${prefix}-${componentLabel}.${suffix}`);
+            recorder.start();
+            voltmeterRoot.recordingState = recording;
+        };
+        simulator.verifyRecordingFolder(callback);
+    }
+
+    function stopRecording() {
+        voltmeterRoot.recordingState = stopped;
+    }
+
     controls: Component {
         MeterControls {
             meter: voltmeterRoot
@@ -73,6 +97,14 @@ Node {
             sliderMaximum: 250
             unit: "mV"
             meterType: "Voltmeter"
+
+            onRecordPressed: {
+                startRecording();
+            }
+
+            onStopPressed: {
+                stopRecording();
+            }
         }
     }
     width: 320
@@ -87,6 +119,7 @@ Node {
     engine: NodeEngine {
         id: voltmeterEngine
         onStepped: {
+            recorder.add();
             if((realTime - lastUpdateTime) > timeRange / maximumPointCount) {
                 time = realTime
                 lastUpdateTime = realTime
@@ -106,6 +139,7 @@ Node {
     }
 
     savedProperties: PropertyGroup {
+        property alias label: voltmeterRoot.label
         property alias width: voltmeterRoot.width
         property alias height: voltmeterRoot.height
         property alias maximumValue: voltmeterRoot.maximumValue
@@ -114,7 +148,9 @@ Node {
 
 
     onEdgeAdded: {
-        numberOfEdges +=1
+        stopRecording();
+
+        numberOfEdges += 1
         var item = chartViewComponent.createObject(chartContainer);
         var plot = item.plot;
         var firePlot = item.firePlot;
@@ -125,7 +161,6 @@ Node {
         });
         item.lineColor = Qt.binding(function(){
             return neuron.color;
-//            return "#CEB6EE"
         });
         item.showAxis = true
         item.showAxisLabel = true
@@ -159,6 +194,7 @@ Node {
     }
 
     onEdgeRemoved: {
+        stopRecording();
         numberOfEdges -=1
         for(var i in connectionPlots) {
             var connectionPlot = connectionPlots[i]
@@ -177,6 +213,52 @@ Node {
         }
     }
 
+    FileTextStreamOut {
+        id: recorder
+
+        function start() {
+            const neruonLabels = [];
+            for(var i in voltmeterRoot.connectionPlots) {
+                var connectionPlot = voltmeterRoot.connectionPlots[i]
+                var plot = connectionPlot.plot
+                var neuron = connectionPlot.connection.itemB
+                if (!neuron) {
+                    continue;
+                }
+                const label = neuron.label.length !== 0 ? neuron.label : `neuron${i}`;
+                neruonLabels.push(`"${label}"`);
+            }
+            if (neruonLabels.length === 0) {
+                stopRecording();
+                return;
+            }
+            const neuronsString = neruonLabels.join(',');
+            write(`"time",${neuronsString}\n`);
+        }
+
+        function add() {
+            time = realTime
+            const voltages = [];
+            for(var i in voltmeterRoot.connectionPlots) {
+                var connectionPlot = voltmeterRoot.connectionPlots[i]
+                var plot = connectionPlot.plot
+                var neuron = connectionPlot.connection.itemB
+                if(!neuron || !neuron.voltage) {
+                    continue;
+                }
+                if (voltmeterRoot.recordingState === recording) {
+                    voltages.push(neuron.voltage);
+                }
+            }
+
+            if (voltages.length === 0) {
+                return;
+            }
+
+            const voltageString = voltages.join(',');
+            write(`${realTime},${voltageString}\n`);
+        }
+    }
 
     Rectangle {
         id: background
@@ -192,6 +274,35 @@ Node {
     ItemShadow {
         anchors.fill: background
         source: background
+    }
+
+    Rectangle {
+        anchors {
+            top: parent.top
+            left: parent.left
+            margins: 8
+        }
+        width: 16
+        height: 16
+        radius: width / 2
+        color: {
+            if(voltmeterRoot.recordingState === recording) {
+                return "red";
+            } else {
+                return "grey";
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if (voltmeterRoot.recordingState === recording) {
+                    stopRecording()
+                } else {
+                    startRecording()
+                }
+            }
+        }
     }
 
     ValueAxis {
@@ -386,6 +497,5 @@ Node {
 
     Connector {
         color: Style.meter.border.color
-//        visible: parent.selected || numberOfEdges < 1
     }
 }

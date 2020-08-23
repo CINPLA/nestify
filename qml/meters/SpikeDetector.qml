@@ -1,6 +1,8 @@
 import QtQuick 2.5
 import QtCharts 2.1
 import Neuronify 1.0
+import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.1
 
 import ".."
 import "../controls"
@@ -21,6 +23,7 @@ import "../style"
 Node {
     id: rasterRoot
 
+    property string label: ""
     property real time: 0.0
     property real timeRange: 100.0e-3
     property real timeScale: 1e-3
@@ -34,6 +37,11 @@ Node {
     property real maximumPointCount: 120
     property int numberOfEdges: 0
 
+    property int stopped: 0
+    property int recording: 1
+    property int error: 2
+
+    property int recordingState: stopped
 
     objectName: "spikeDetector"
     filename: "meters/SpikeDetector.qml"
@@ -49,6 +57,7 @@ Node {
     preferredEdge: MeterEdge {}
 
     savedProperties: PropertyGroup {
+        property alias label: rasterRoot.label
         property alias width: rasterRoot.width
         property alias height: rasterRoot.height
         property alias timeRange: rasterRoot.timeRange
@@ -67,6 +76,28 @@ Node {
 
     controls: Component {
         PropertiesPage {
+            Label {
+                text: "Label:"
+                Layout.fillWidth: true
+            }
+
+            TextField {
+                id: labelField
+                Layout.fillWidth: true
+                text: rasterRoot.label
+                selectByMouse: true
+                Binding {
+                    target: rasterRoot
+                    property: "label"
+                    value: labelField.text
+                }
+                Binding {
+                    target: labelField
+                    property: "text"
+                    value: rasterRoot.label
+                }
+            }
+
             BoundSlider {
                 target: rasterRoot
                 property: "timeRange"
@@ -78,34 +109,54 @@ Node {
                 stepSize: 10.0e-3
             }
 
-//            ConnectMultipleControl {
-//                toEnabled: false
-//                node: rasterRoot
-//            }
+            Button {
+                text: "Record"
+                onPressed: startRecording()
+            }
 
-//            ResetControl {
-//                engine: rasterRoot.engine
-//            }
+            Button {
+                text: "Stop"
+                onPressed: stopRecording()
+            }
         }
     }
 
     function refreshCategories() {
         var toRemove = []
-        for(var i in axisY.categoriesLabels) {
+        for(let i in axisY.categoriesLabels) {
             toRemove.push(axisY.categoriesLabels[i])
         }
-        for(var i in toRemove) {
+        for(let i in toRemove) {
             var label = toRemove[i]
             axisY.remove(label)
         }
-        for(var i in neurons) {
+        for(let i in neurons) {
             var neuron = neurons[i]
             var position = parseFloat(i) + 1.5
             axisY.append(" " + neuron.label, position)
         }
     }
 
+    function startRecording() {
+        const callback = (folder) => {
+            const prefix = new Date().toISOString().split(".")[0].replace(/:/g, "");
+            const suffix = "csv";
+            const sanitizedLabel = label.replace(' ', '_').replace(/\W/g, '');
+            const componentLabel = sanitizedLabel.length > 0 ? sanitizedLabel : "spike-detector";
+            recorder.fileName = Qt.resolvedUrl(`${folder}/${prefix}-${componentLabel}.${suffix}`);
+            recorder.start();
+            rasterRoot.recordingState = recording;
+        };
+        simulator.verifyRecordingFolder(callback);
+    }
+
+    function stopRecording() {
+        rasterRoot.recordingState = stopped;
+    }
+
+
     onEdgeAdded: {
+        stopRecording();
         numberOfEdges +=1
         var neuron = edge.itemB
         var newList = neurons
@@ -116,6 +167,7 @@ Node {
                 var neuron2 = neurons[i]
                 if(neuron2 === neuron) {
                     scroller.append(time / timeScale, parseFloat(i) + 1.0)
+                    recorder.addSpike(realTime, neuron);
                 }
             }
         });
@@ -125,6 +177,7 @@ Node {
     }
 
     onEdgeRemoved: {
+        stopRecording();
         numberOfEdges -=1
         var neuron = edge.itemB
         var newList = neurons
@@ -139,6 +192,24 @@ Node {
         refreshCategories()
     }
 
+    FileTextStreamOut {
+        id: recorder
+
+        function start() {
+            write(`"time","neuron"\n`);
+        }
+
+        function addSpike(time, neuron) {
+            if (rasterRoot.recordingState !== recording) {
+                return;
+            }
+
+            const label = neuron.label.length > 0 ? neuron.label : "unnamed";
+            write(`${time},"${label}"\n`);
+        }
+    }
+
+
     Rectangle {
         anchors.fill: parent
         color: parent.color
@@ -147,6 +218,36 @@ Node {
         smooth: true
         antialiasing: true
     }
+
+    Rectangle {
+        anchors {
+            top: parent.top
+            left: parent.left
+            margins: 8
+        }
+        width: 16
+        height: 16
+        radius: width / 2
+        color: {
+            if(rasterRoot.recordingState === recording) {
+                return "red";
+            } else {
+                return "grey";
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if (rasterRoot.recordingState === recording) {
+                    stopRecording()
+                } else {
+                    startRecording()
+                }
+            }
+        }
+    }
+
 
     ChartView {
         anchors.fill: parent
