@@ -12,15 +12,15 @@ import QtMultimedia 5.5
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0
 
-import Neuronify 1.0
 import CuteVersioning 1.0
 import QtGraphicalEffects 1.0
+import Neuronify 1.0
+import Neuronify 1.0 as NFY
 
 import "qrc:/qml/backend"
 import "qrc:/qml/controls"
 import "qrc:/qml/hud"
 import "qrc:/qml/io"
-import "qrc:/qml/hud"
 import "qrc:/qml/menus"
 import "qrc:/qml/menus/filemenu"
 import "qrc:/qml/tools"
@@ -34,8 +34,17 @@ Item {
     signal requestClose
 
     property bool dragging: false
-    property var currentSimulation
+    property var currentSimulation: {
+        return {
+            name: "Unnamed",
+            description: "",
+            file: undefined
+        }
+    }
+
     property bool ignoreUnsavedChanges: false
+    // TODO move to StandardPaths
+    readonly property url latestLocation: NFY.StandardPaths.writableLocation(StandardPaths.CacheLocation, "latest.neuronify")
 
     function open(file) {
         var simulation = NeuronifyFile.open(file)
@@ -67,18 +76,27 @@ Item {
     }
 
     function firstLoad() {
-        neuronify.loadSimulation("qrc:/simulations/tutorial/tutorial_1_intro/tutorial_1_intro.nfy") // TODO replace with open
+        if (FileIO.exists(latestLocation)) {
+            root.open(latestLocation);
+        } else {
+            neuronify.loadSimulation("qrc:/simulations/tutorial/tutorial_1_intro/tutorial_1_intro.nfy") // TODO replace with open
+        }
     }
 
-    function tryClose() {
-        if(ignoreUnsavedChanges) {
-            return true
-        }
-        if(neuronify.hasUnsavedChanges) {
+    function tryClose(callback) {
+        const simulation = {
+            name: currentSimulation.name,
+            description: currentSimulation.description,
+            file: latestLocation
+        };
+
+        if(!ignoreUnsavedChanges && neuronify.hasUnsavedChanges) {
             unsavedDialog.openWithRequestedAction(root.requestClose)
-            return false
+            return false;
         }
-        return true
+
+        neuronify.save(simulation, callback);
+        return false;
     }
 
     state: "view"
