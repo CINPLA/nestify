@@ -183,6 +183,8 @@ Node {
                 firePlot.addPoint(time * timeFactor - 1e-1, 1000e-3 * voltageFactor)
                 firePlot.addPoint(time * timeFactor, neuron.voltage * voltageFactor)
                 firePlot.addPoint(time * timeFactor + 1e-1, 1000e-3 * voltageFactor)
+
+                recorder.addSpike(neuron)
             }
         }
 
@@ -226,18 +228,18 @@ Node {
                     continue;
                 }
                 const label = neuron.label.length !== 0 ? neuron.label : `neuron${i}`;
-                neruonLabels.push(`"${label}"`);
+                neruonLabels.push(`"${label} [mV]"`);
             }
             if (neruonLabels.length === 0) {
                 stopRecording();
                 return;
             }
             const neuronsString = neruonLabels.join(',');
-            write(`"time",${neuronsString}\n`);
+            write(`"time [ms]",${neuronsString}\n`);
         }
 
         function add() {
-            time = realTime
+            const time = realTime * timeFactor;
             const voltages = [];
             for(var i in voltmeterRoot.connectionPlots) {
                 var connectionPlot = voltmeterRoot.connectionPlots[i]
@@ -247,7 +249,7 @@ Node {
                     continue;
                 }
                 if (voltmeterRoot.recordingState === recording) {
-                    voltages.push(neuron.voltage);
+                    voltages.push(neuron.voltage * voltageFactor);
                 }
             }
 
@@ -256,7 +258,31 @@ Node {
             }
 
             const voltageString = voltages.join(',');
-            write(`${realTime},${voltageString}\n`);
+            write(`${time},${voltageString}\n`);
+        }
+
+        function addSpike(spikeNeuron) {
+            const time = realTime * timeFactor
+            const voltages = [];
+            for(var i in voltmeterRoot.connectionPlots) {
+                var connectionPlot = voltmeterRoot.connectionPlots[i]
+                var plot = connectionPlot.plot
+                var neuron = connectionPlot.connection.itemB
+                if(!neuron || !neuron.voltage) {
+                    continue;
+                }
+                if (voltmeterRoot.recordingState === recording) {
+                    const voltage = neuron === spikeNeuron ? "NaN" : neuron.voltage * voltageFactor;
+                    voltages.push(voltage);
+                }
+            }
+
+            if (voltages.length === 0) {
+                return;
+            }
+
+            const voltageString = voltages.join(',');
+            write(`${time},${voltageString}\n`);
         }
     }
 

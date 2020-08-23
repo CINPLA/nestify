@@ -196,7 +196,7 @@ Node {
         id: recorder
 
         function start() {
-            write(`"time","neuron"\n`);
+            write(`"time [ms]","neuron"\n`);
         }
 
         function addSpike(time, neuron) {
