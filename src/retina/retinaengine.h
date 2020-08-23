@@ -10,7 +10,7 @@
 #include "../core/nodeengine.h"
 #include "kernel.h"
 
-using namespace std;
+using std::vector;
 
 class RetinaEngine : public NodeEngine
 {
