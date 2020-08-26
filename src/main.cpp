@@ -17,9 +17,14 @@
 
 #include "neurons/neuronengine.h"
 #include "neurons/rateengine.h"
-#include "neurons/current.h"
-#include "neurons/leakcurrent.h"
-#include "neurons/adaptationcurrent.h"
+
+#include "currents/current.h"
+#include "currents/leakcurrent.h"
+#include "currents/adaptationcurrent.h"
+#include "currents/sodiumcurrent.h"
+#include "currents/potassiumcurrent.h"
+
+#include "compartments/compartmentengine.h"
 
 #include "io/fileio.h" // TODO consider removing
 #include "io/standardpaths.h"
@@ -36,6 +41,7 @@
 #include <QQuickView>
 #include <QDebug>
 #include <QmlPreviewer>
+
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +63,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<EdgeEngine>("Neuronify", 1, 0, "EdgeEngine");
 
     qmlRegisterType<NeuronEngine>("Neuronify", 1, 0, "NeuronEngineBase");
+    qmlRegisterType<CompartmentEngine>("Neuronify", 1, 0, "CompartmentEngineBase");
 
     qmlRegisterUncreatableType<AbstractKernelEngine>("Neuronify", 1, 0,
                                                "AbstractKernelEngine",
@@ -74,6 +81,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<Current>("Neuronify", 1, 0, "Current");
     qmlRegisterType<LeakCurrent>("Neuronify", 1, 0, "LeakCurrent");
     qmlRegisterType<AdaptationCurrent>("Neuronify", 1, 0, "AdaptationCurrent");
+    qmlRegisterType<SodiumCurrent>("Neuronify", 1, 0, "SodiumCurrent");
+    qmlRegisterType<PotassiumCurrent>("Neuronify", 1, 0, "PotassiumCurrent");
 
     qmlRegisterType<RateEngine>("Neuronify", 1, 0, "RateEngine");
     qmlRegisterType<PropertyGroup>("Neuronify", 1, 0, "PropertyGroup");

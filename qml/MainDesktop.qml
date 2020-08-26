@@ -68,7 +68,8 @@ Item {
     }
 
     function firstLoad() {
-        neuronify.loadSimulation("qrc:/simulations/tutorial/tutorial_1_intro/tutorial_1_intro.nfy") // TODO replace with open
+//        neuronify.loadSimulation("qrc:/simulations/tutorial/tutorial_1_intro/tutorial_1_intro.nfy") // TODO replace with open
+        open("file:///home/svenni/tmp/test.neuronify")
     }
 
     function tryClose() {
@@ -327,6 +328,12 @@ Item {
                         source: "qrc:/qml/generators/CurrentClamp.qml"
                         imageSource: "qrc:/images/generators/current_clamp.png"
                         listSource: "qrc:/qml/hud/GeneratorsList.qml"
+                    }
+                    ListElement  {
+                        name: "Compartments"
+                        source: "qrc:/qml/compartments/HHCompartment.qml"
+                        imageSource: "qrc:/images/generators/current_clamp.png"
+                        listSource: "qrc:/qml/hud/CompartmentsList.qml"
                     }
                     ListElement  {
                         name: "Annotation"

@@ -122,6 +122,13 @@
         <file>qml/menus/filemenu/AccountView.qml</file>
         <file>qml/menus/filemenu/NewView.qml</file>
         <file>qml/menus/filemenu/MySimulations.qml</file>
+        <file>qml/edges/CompartmentConnection.qml</file>
+        <file>qml/hud/TopCreationItem.qml</file>
+        <file>qml/compartments/SimpleCompartment.qml</file>
+        <file>qml/hud/CompartmentsList.qml</file>
+        <file>qml/compartments/CompartmentEngine.qml</file>
+        <file>qml/meters/Amperemeter.qml</file>
+        <file>qml/compartments/HHCompartment.qml</file>
         <file>qml/menus/filemenu/AboutView.qml</file>
     </qresource>
 </RCC>

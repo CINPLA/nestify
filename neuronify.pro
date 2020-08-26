@@ -15,14 +15,11 @@ HEADERS += \
     src/core/graphengine.h \
     src/core/nodebase.h \
     src/core/nodeengine.h \
-    src/neurons/current.h \
     src/neurons/neuronengine.h \
     src/retina/androidmultimediautils.h \
     src/retina/retinaengine.h \
     src/retina/retinapainter.h \
     src/retina/videosurface.h \
-    src/neurons/leakcurrent.h \
-    src/neurons/adaptationcurrent.h \
     src/retina/kernel.h \
     src/retina/kernels/gaborkernelengine.h \
     src/retina/kernels/abstractkernelengine.h \
@@ -36,7 +33,13 @@ HEADERS += \
     src/core/edgebase.h \
     src/core/edgeengine.h \
     src/io/downloadmanager.h \
-    src/io/neuronifyfile.h
+    src/io/neuronifyfile.h \
+    src/currents/current.h \
+    src/currents/leakcurrent.h \
+    src/currents/potassiumcurrent.h \
+    src/currents/sodiumcurrent.h \
+    src/currents/adaptationcurrent.h \
+    src/compartments/compartmentengine.h
 
 SOURCES += \
     src/io/fileio.cpp \
@@ -44,14 +47,11 @@ SOURCES += \
     src/core/nodebase.cpp \
     src/core/nodeengine.cpp \
     src/core/graphengine.cpp \
-    src/neurons/current.cpp \
     src/neurons/neuronengine.cpp \
     src/retina/retinaengine.cpp \
     src/retina/retinapainter.cpp \
     src/retina/videosurface.cpp \
     src/retina/androidmultimediautils.cpp \
-    src/neurons/adaptationcurrent.cpp \
-    src/neurons/leakcurrent.cpp \
     src/retina/kernel.cpp \
     src/retina/kernels/gaborkernelengine.cpp \
     src/retina/kernels/abstractkernelengine.cpp \
@@ -65,7 +65,13 @@ SOURCES += \
     src/core/edgebase.cpp \
     src/core/edgeengine.cpp \
     src/io/downloadmanager.cpp \
-    src/io/neuronifyfile.cpp
+    src/io/neuronifyfile.cpp \
+    src/currents/leakcurrent.cpp \
+    src/currents/potassiumcurrent.cpp \
+    src/currents/sodiumcurrent.cpp \
+    src/currents/adaptationcurrent.cpp \
+    src/compartments/compartmentengine.cpp \
+    src/currents/current.cpp
 
 
 RESOURCES += qml.qrc \

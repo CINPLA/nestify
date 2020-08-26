@@ -159,6 +159,8 @@ void GraphEngine::removeEdge(EdgeBase *edge)
 
 void step(const QVector<NodeBase*> &nodes, const QVector<EdgeBase*> &edges, double dt)
 {
+    dt = 0.01e-3;
+
     // step all nodes
     for(NodeBase* node : nodes) {
         if(node->engine()) {
@@ -197,6 +199,9 @@ void step(const QVector<NodeBase*> &nodes, const QVector<EdgeBase*> &edges, doub
         if(edge->engine()) {
             if(edge->engine()->currentOutput() != 0.0) {
                 engineB->receiveCurrent(sign * edge->engine()->currentOutput(), engineA);
+            }
+            if(edge->engine()->currentInput() != 0.0) {
+                engineA->receiveCurrent(sign * edge->engine()->currentInput(), engineB);
             }
         }
 

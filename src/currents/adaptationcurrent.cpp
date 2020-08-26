@@ -1,7 +1,5 @@
 #include "adaptationcurrent.h"
 
-#include "neuronengine.h"
-
 /*!
  * \class AdaptationCurrent
  * \inmodule Neuronify
@@ -37,6 +35,16 @@ double AdaptationCurrent::timeConstant() const
     return m_timeConstant;
 }
 
+double AdaptationCurrent::voltage() const
+{
+    return m_voltage;
+}
+
+double AdaptationCurrent::restingPotential() const
+{
+    return m_restingPotential;
+}
+
 void AdaptationCurrent::setAdaptation(double arg)
 {
     if (m_adaptation == arg)
@@ -64,20 +72,33 @@ void AdaptationCurrent::setTimeConstant(double arg)
     emit timeConstantChanged(arg);
 }
 
+void AdaptationCurrent::setVoltage(double voltage)
+{
+    if (qFuzzyCompare(m_voltage, voltage))
+        return;
+
+    m_voltage = voltage;
+    emit voltageChanged(m_voltage);
+}
+
+void AdaptationCurrent::setRestingPotential(double restingPotential)
+{
+    if (qFuzzyCompare(m_restingPotential, restingPotential))
+        return;
+
+    m_restingPotential = restingPotential;
+    emit restingPotentialChanged(m_restingPotential);
+}
+
 void AdaptationCurrent::stepEvent(double dt, bool parentEnabled)
 {
     Q_UNUSED(dt);
     if(!parentEnabled) {
         return;
     }
-    NeuronEngine* parentNode = qobject_cast<NeuronEngine*>(parent());
-    if(!parentNode) {
-        qWarning() << "Warning: Parent of Current is not NeuronNode. Cannot find voltage.";
-        return;
-    }
 
-    double Em = parentNode->restingPotential();
-    double V = parentNode->voltage();
+    double Em = m_restingPotential;
+    double V = m_voltage;
     double g = m_conductance;
     double tau = m_timeConstant;
 

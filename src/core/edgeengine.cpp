@@ -12,6 +12,11 @@ double EdgeEngine::currentOutput() const
     return m_currentOutput;
 }
 
+double EdgeEngine::currentInput() const
+{
+    return m_currentInput;
+}
+
 void EdgeEngine::stepEvent(double dt, bool parentEnabled)
 {
     Q_UNUSED(dt)
@@ -31,6 +36,15 @@ void EdgeEngine::receiveFire(NodeEngine *sender)
     }
     receiveFireEvent(sender);
     emit receivedFire(sender);
+}
+
+void EdgeEngine::setCurrentInput(double currentInput)
+{
+    if (qFuzzyCompare(m_currentInput, currentInput))
+        return;
+
+    m_currentInput = currentInput;
+    emit currentInputChanged(m_currentInput);
 }
 
 void EdgeEngine::step(double dt, bool parentEnabled)

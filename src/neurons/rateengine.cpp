@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <cmath>
 
-#include "current.h"
+#include "../currents/current.h"
 
 using namespace std;
 

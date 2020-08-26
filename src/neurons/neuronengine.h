@@ -62,7 +62,7 @@ private:
     void checkFire();
 
     double m_voltage = 0.0;
-    double m_restingPotential = -70.0e-3;
+    double m_restingPotential = -70.0e-3; // TODO remove from here?
     double m_initialPotential = -80.0e-3;
     double m_threshold = -55.0e-3;
     double m_capacitance = 0.2e-9;

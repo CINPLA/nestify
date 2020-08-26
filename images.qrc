@@ -2146,7 +2146,7 @@
         <file>images/material-icons/toggle/svg/production/ic_star_border_24px.svg</file>
         <file>images/material-icons/toggle/svg/production/ic_star_half_24px.svg</file>
         <file>images/material-icons/toggle/svg/production/ic_star_half_48px.svg</file>
-        <file>qml/hud/TopCreationItem.qml</file>
         <file>images/dashboard/integrate-and-fire.png</file>
+        <file>images/meters/amperemeter.png</file>
     </qresource>
 </RCC>

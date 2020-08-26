@@ -1,7 +1,5 @@
 #include "current.h"
 
-#include "neuronengine.h"
-
 /*!
  * \class Current
  * \inmodule Neuronify

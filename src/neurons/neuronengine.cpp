@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <cmath>
 
-#include "current.h"
+#include "../currents/current.h"
 
 using namespace std;
 
@@ -94,6 +94,7 @@ void NeuronEngine::stepEvent(double dt, bool parentEnabled)
 
     checkFire();
 
+    // TODO do this only when children added/removed?
     double otherCurrents = 0.0;
     for(Current* current : findChildren<Current*>()) {
         if(current->isEnabled()) {
@@ -125,6 +126,7 @@ void NeuronEngine::fireEvent()
 void NeuronEngine::receiveCurrentEvent(double currentOutput, NodeEngine *sender)
 {
     Q_UNUSED(sender);
+    // TODO Do this in GraphEngine?
     if(!isEnabled()) {
         return;
     }

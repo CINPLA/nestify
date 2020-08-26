@@ -8,6 +8,12 @@ ListModel {
         imageSource: "qrc:/images/meters/voltmeter.png"
     }
     ListElement {
+        name: "Amperemeter"
+        description: "Measures the different currents"
+        source: "qrc:/qml/meters/Amperemeter.qml"
+        imageSource: "qrc:/images/meters/amperemeter.png"
+    }
+    ListElement {
         name: "Spike detector"
         description: "Shows firing times of neurons"
         source: "qrc:/qml/meters/SpikeDetector.qml"

@@ -23,9 +23,13 @@ Neuron {
         id: neuronEngine
         LeakCurrent {
             id: leakCurrent
+            voltage: neuronEngine.voltage
+            restingPotential: neuronEngine.restingPotential
         }
         AdaptationCurrent {
             id: adaptationCurrent
+            voltage: neuronEngine.voltage
+            restingPotential: neuronEngine.restingPotential
         }
         savedProperties: PropertyGroup {
             property alias adaptation: adaptationCurrent.adaptation
