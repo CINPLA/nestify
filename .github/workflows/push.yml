@@ -62,6 +62,8 @@ jobs:
           cd build
           qmake ..
           make
+          mkdir -p packaging/linux/bin/
+          cp neuronify packaging/linux/bin/
           make clean
           wget https://github.com/probonopd/linuxdeployqt/releases/download/7/linuxdeployqt-7-x86_64.AppImage
           chmod +x linuxdeployqt-7-x86_64.AppImage
