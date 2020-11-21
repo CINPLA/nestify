@@ -25,7 +25,6 @@ jobs:
           cd build
           qmake ..
           nmake
-          nmake clean
           set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data
           xcopy /s "release" "%INSTALLER_DIR%"
           xcopy /s "%Qt5_DIR%%\qml" "%INSTALLER_DIR%"
@@ -58,7 +57,6 @@ jobs:
           cd build
           qmake ..
           make
-          make clean
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
