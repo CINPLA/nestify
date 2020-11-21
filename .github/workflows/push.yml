@@ -62,12 +62,7 @@ jobs:
           cd build
           qmake ..
           make
-          mkdir -p packaging/linux/Neuronify.AppDir/bin/
-          cp neuronify packaging/linux/Neuronify.AppDir/bin/
           make clean
-          wget https://github.com/probonopd/linuxdeployqt/releases/download/7/linuxdeployqt-7-x86_64.AppImage
-          chmod +x linuxdeployqt-7-x86_64.AppImage
-          ./linuxdeployqt-7-x86_64.AppImage packaging/linux/Neuronify.AppDir/share/applications/neuronify.desktop -verbose=2
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
