@@ -21,12 +21,53 @@ jobs:
         shell: cmd
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          qmake .
+          mkdir build
+          cd build
+          qmake ..
           nmake
-      - name: Build on Unix
-        if: (!startsWith(matrix.os, 'windows'))
+          nmake clean
+          set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data
+          xcopy /s "release" "%INSTALLER_DIR%"
+          xcopy /s "%Qt5_DIR%%\qml" "%INSTALLER_DIR%"
+          xcopy /s "%Qt5_DIR%%\bin\Qt5MultimediaQuick.dll" "%INSTALLER_DIR%"
+          windeployqt.exe -quick -quickwidgets -multimedia -opengl -quickparticles -quickwidgets -qmldir . "%INSTALLER_DIR%"
+          binarycreator.exe -c installer/config/config.xml -p installer/packages neuronify-windows-installer
+      - name: Build on MacOS
+        if: startsWith(matrix.os, 'mac')
         run: |
           mkdir build
           cd build
           qmake ..
           make
+          macdeployqt neuronify.app -qmldir=. -dmg
+      - name: Build snap
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          mkdir build
+          cd build
+          qmake ..
+          make
+          macdeployqt neuronify.app -qmldir=. -dmg
+          make clean
+      - uses: snapcore/action-build@v1
+        if: startsWith(matrix.os, 'ubuntu')
+        id: buildsnap
+      - uses: snapcore/action-publish@v1
+        if: startsWith(matrix.os, 'ubuntu')
+        with:
+          store_login: ${{ secrets.SNAP_STORE_LOGIN }}
+          snap: ${{ steps.buildsnap.outputs.snap }}
+          release: edge
+      - name: Build on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          mkdir build
+          cd build
+          qmake ..
+          make
+          make clean
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: build
