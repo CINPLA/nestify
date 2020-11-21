@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Neuronify
+Comment=Educational neural network app
+Exec=neuronify
+Icon=${SNAP}/meta/gui/neuronify.png
+Terminal=false
+Categories=Education;
+Keywords=neuronify;neural;networks;neuron;neuroscience;biology;science;
