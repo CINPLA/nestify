@@ -16,17 +16,15 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: "qtcharts qtmultimedia qtmultimediawidgets qtsql"
+          tools: "tools_ifw,4.0,qt.tools.ifw.40"
       - name: Build on Windows
         if: startsWith(matrix.os, 'windows')
         shell: cmd
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          mkdir build
-          cd build
-          qmake ..
+          qmake
           nmake
-          set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data
-          xcopy /s "..\%INSTALLER_DIR%" "%INSTALLER_DIR%"
+          set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data\
           xcopy /s "release" "%INSTALLER_DIR%"
           xcopy /s "%Qt5_DIR%\qml" "%INSTALLER_DIR%"
           xcopy /s "%Qt5_DIR%\bin\Qt5MultimediaQuick.dll" "%INSTALLER_DIR%"
