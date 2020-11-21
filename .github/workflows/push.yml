@@ -15,11 +15,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          modules:
-            - qtcharts
-            - qtmultimedia
-            - qtmultimediawidgets
-            - qtsql
+          modules: "qtcharts qtmultimedia qtmultimediawidgets qtsql"
       - name: Build
         run: |
           mkdir build
