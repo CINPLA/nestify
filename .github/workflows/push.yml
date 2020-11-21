@@ -41,18 +41,11 @@ jobs:
           make
           macdeployqt neuronify.app -qmldir=. -dmg
       - name: Build snap
-        if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          mkdir build
-          cd build
-          qmake ..
-          make
-          macdeployqt neuronify.app -qmldir=. -dmg
-          make clean
-      - uses: snapcore/action-build@v1
+        uses: snapcore/action-build@v1
         if: startsWith(matrix.os, 'ubuntu')
         id: buildsnap
-      - uses: snapcore/action-publish@v1
+      - name: Publish snap
+        uses: snapcore/action-publish@v1
         if: startsWith(matrix.os, 'ubuntu')
         with:
           store_login: ${{ secrets.SNAP_STORE_LOGIN }}
