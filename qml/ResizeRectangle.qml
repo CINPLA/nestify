@@ -8,24 +8,7 @@ Item {
     property bool forceSquare: false
 
     anchors.fill: target
-//    enabled: target.selected
     visible: target.selected
-
-    ResizeHandle {
-        id: topLeft
-        target: resizeRectangle.target
-        anchors {
-            left: parent.left
-            top: parent.top
-            leftMargin: -width / 2
-            topMargin: -height / 2
-        }
-        xFactor: 1.0
-        yFactor: 1.0
-        widthFactor: -1.0
-        heightFactor: -1.0
-        forceSquare: resizeRectangle.forceSquare
-    }
 
     ResizeHandle {
         id: bottomLeft
