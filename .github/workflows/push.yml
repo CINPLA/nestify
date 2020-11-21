@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest, ubuntu-20.04]
+        os: [windows-latest, macOS-latest, ubuntu-16.04]
         version: ['5.15.1']
     steps:
       - name: Checkout
@@ -24,7 +24,7 @@ jobs:
           set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data\
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
-          xcopy /s "%INSTALLER_DIR%" "build\"
+          xcopy /s "..\installer" "build\"
           cd build
           qmake ..
           nmake
@@ -53,24 +53,19 @@ jobs:
           qmake ..
           make
           macdeployqt neuronify.app -qmldir=. -dmg
-      - name: Build snap
-        uses: snapcore/action-build@v1
-        if: startsWith(matrix.os, 'ubuntu')
-        id: buildsnap
-      - name: Publish snap
-        uses: snapcore/action-publish@v1
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          store_login: ${{ secrets.SNAP_STORE_LOGIN }}
-          snap: ${{ steps.buildsnap.outputs.snap }}
-          release: edge
+          make clean
       - name: Build on Ubuntu
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           mkdir build
+          cp -r packaging build/
           cd build
           qmake ..
           make
+          make clean
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/7/linuxdeployqt-7-x86_64.AppImage
+          chmod +x linuxdeployqt-7-x86_64.AppImage
+          ./linuxdeployqt-7-x86_64.AppImage packaging/linux/share/applications/neuronify.desktop
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
