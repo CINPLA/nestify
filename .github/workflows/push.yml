@@ -28,8 +28,20 @@ jobs:
           xcopy /s "release" "%INSTALLER_DIR%"
           xcopy /s "%Qt5_DIR%\qml" "%INSTALLER_DIR%"
           xcopy /s "%Qt5_DIR%\bin\Qt5MultimediaQuick.dll" "%INSTALLER_DIR%"
+          echo dir qt5
+          dir "%Qt5_DIR%"
+          echo dir qt5 ..
+          dir "%Qt5_DIR%\.."
+          echo dir qt5 ..
+          dir "%Qt5_DIR%\..\.."
+          echo dir
+          dir
+          echo dir installer
+          dir "%INSTALLER_DIR%"
+          echo windeployqt
           windeployqt.exe -quick -quickwidgets -multimedia -opengl -quickparticles -quickwidgets -qmldir . "%INSTALLER_DIR%"
-          binarycreator.exe -c installer/config/config.xml -p installer/packages neuronify-windows-installer
+          echo binarycreator
+          "%Qt5_DIR%\..\..\Tools\QtInstallerFramework\4.0\bin\binarycreator.exe" -c installer/config/config.xml -p installer/packages neuronify-windows-installer
       - name: Build on MacOS
         if: startsWith(matrix.os, 'mac')
         run: |
