@@ -16,12 +16,17 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           modules: "qtcharts qtmultimedia qtmultimediawidgets qtsql"
-      - name: Configure Windows
+      - name: Build on Windows
         if: startsWith(matrix.os, 'windows')
         shell: cmd
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-      - name: Build
+          mkdir build
+          cd build
+          qmake ..
+          make
+      - name: Build on Unix
+        if: (!startsWith(matrix.os, 'windows'))
         run: |
           mkdir build
           cd build
