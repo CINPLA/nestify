@@ -22,7 +22,7 @@ jobs:
         run: |
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake .
-          make
+          nmake
       - name: Build on Unix
         if: (!startsWith(matrix.os, 'windows'))
         run: |
