@@ -67,7 +67,7 @@ jobs:
           make clean
           wget https://github.com/probonopd/linuxdeployqt/releases/download/7/linuxdeployqt-7-x86_64.AppImage
           chmod +x linuxdeployqt-7-x86_64.AppImage
-          ./linuxdeployqt-7-x86_64.AppImage packaging/linux/share/applications/neuronify.desktop
+          ./linuxdeployqt-7-x86_64.AppImage -verbose=2 packaging/linux/share/applications/neuronify.desktop
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
