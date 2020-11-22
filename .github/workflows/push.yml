@@ -42,7 +42,7 @@ jobs:
           echo dir installer
           dir "%INSTALLER_DIR%"
           echo windeployqt
-          windeployqt.exe -quick -quickwidgets -multimedia -opengl -quickparticles -quickwidgets -qmldir . "%INSTALLER_DIR%"
+          windeployqt.exe -quick -quickwidgets -multimedia -opengl -quickparticles -quickwidgets -qmldir . %INSTALLER_DIR%
           echo binarycreator
           "%Qt5_DIR%\..\..\Tools\QtInstallerFramework\4.0\bin\binarycreator.exe" -c installer/config/config.xml -p installer/packages neuronify-windows-installer
       - name: Build on MacOS
