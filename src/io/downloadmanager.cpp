@@ -1,22 +1,22 @@
 #include "downloadmanager.h"
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QJSEngine>
+#include <QJSValue>
+#include <QJsonDocument>
 #include <QList>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QQmlFile>
 #include <QSslError>
+#include <QStandardPaths>
 #include <QStringList>
 #include <QTimer>
 #include <QUrl>
-#include <QDir>
-#include <QJSValue>
-#include <QJSEngine>
-#include <QQmlFile>
-#include <QJsonDocument>
-#include <QStandardPaths>
 
 bool saveToDisk(const QString &filename, QIODevice *data)
 {
@@ -32,9 +32,7 @@ bool saveToDisk(const QString &filename, QIODevice *data)
     return true;
 }
 
-DownloadManager::DownloadManager()
-{
-}
+DownloadManager::DownloadManager() {}
 
 void DownloadManager::upload(const QString &objectName, const QUrl localUrl, QJSValue callback)
 {
@@ -45,25 +43,24 @@ void DownloadManager::upload(const QString &objectName, const QUrl localUrl, QJS
     QByteArray data = file.readAll();
 
     uploadData(objectName, data, "image/png", [callback](const QString &result) mutable {
-        callback.call(QJSValueList{
-                          QJSValue(result)
-                      });
+        callback.call(QJSValueList{QJSValue(result)});
     });
 }
 
 void DownloadManager::uploadText(const QString &objectName, const QString text, QJSValue callback)
 {
     uploadData(objectName, text.toUtf8(), "plain/text", [callback](const QString &result) mutable {
-        callback.call(QJSValueList{
-                          QJSValue(result)
-                      });
+        callback.call(QJSValueList{QJSValue(result)});
     });
 }
 
-void DownloadManager::uploadData(const QString &objectName, const QByteArray data, const QByteArray contentType, std::function<void(const QString&)> callback)
+void DownloadManager::uploadData(const QString &objectName,
+                                 const QByteArray data,
+                                 const QByteArray contentType,
+                                 std::function<void(const QString &)> callback)
 {
-    QString urlString = QString("https://firebasestorage.googleapis.com/v0/b/") +
-            m_storageBucket + "/o?name=" + QUrl::toPercentEncoding(objectName);
+    QString urlString = QString("https://firebasestorage.googleapis.com/v0/b/") + m_storageBucket
+                        + "/o?name=" + QUrl::toPercentEncoding(objectName);
     QUrl url(urlString);
 
     QNetworkRequest request(url);
@@ -81,17 +78,17 @@ void DownloadManager::uploadData(const QString &objectName, const QByteArray dat
     });
 }
 
-void DownloadManager::download(const QString &objectName, const QUrl &localUrl, std::function<void ()> callback)
+void DownloadManager::download(const QString &objectName,
+                               const QUrl &localUrl,
+                               std::function<void()> callback)
 {
-
     qDebug() << "Storage bucket" << m_storageBucket;
 
-    QString urlString = QString("https://firebasestorage.googleapis.com/v0/b/") +
-            m_storageBucket + "/o/" + QUrl::toPercentEncoding(objectName) +
-            QString("?alt=media");
+    QString urlString = QString("https://firebasestorage.googleapis.com/v0/b/") + m_storageBucket
+                        + "/o/" + QUrl::toPercentEncoding(objectName) + QString("?alt=media");
     QUrl url(urlString);
 
-    if(!localUrl.isLocalFile()) {
+    if (!localUrl.isLocalFile()) {
         qWarning() << "ERROR: Requested download location is not local url:" << localUrl;
         return;
     }
@@ -102,7 +99,7 @@ void DownloadManager::download(const QString &objectName, const QUrl &localUrl, 
     QNetworkReply *reply = m_networkAccessManager.get(request);
     connect(reply, &QNetworkReply::finished, [reply, targetFilename, callback]() mutable {
         QDir targetDir = QFileInfo(targetFilename).absoluteDir();
-        if(!targetDir.mkpath(".")) {
+        if (!targetDir.mkpath(".")) {
             qDebug() << "ERROR: Could not create path" << targetDir;
             return;
         }
@@ -127,10 +124,9 @@ void DownloadManager::download(const QString &objectName, const QUrl &localUrl, 
 #endif
 }
 
-void DownloadManager::download(const QString &objectName, const QUrl &localUrl, QJSValue callback) {
-    download(objectName, localUrl, [callback]() mutable {
-        callback.call();
-    });
+void DownloadManager::download(const QString &objectName, const QUrl &localUrl, QJSValue callback)
+{
+    download(objectName, localUrl, [callback]() mutable { callback.call(); });
 }
 
 void DownloadManager::cachedDownload(const QString &objectName, QJSValue callback)
@@ -141,9 +137,7 @@ void DownloadManager::cachedDownload(const QString &objectName, QJSValue callbac
     fileName += QDir::separator() + localObjectName;
     QUrl localUrl = QUrl::fromLocalFile(fileName);
     download(objectName, localUrl, [localUrl, callback]() mutable {
-        callback.call(QJSValueList{
-                          QJSValue{localUrl.toString()}
-                      });
+        callback.call(QJSValueList{QJSValue{localUrl.toString()}});
     });
 }
 
@@ -246,13 +240,16 @@ void DownloadManager::setApiKey(QString apiKey)
     emit apiKeyChanged(m_apiKey);
 }
 
+#ifndef QT_NO_SSL
 void DownloadManager::handleSslErrors(const QList<QSslError> &sslErrors)
 {
     foreach (const QSslError &error, sslErrors)
         fprintf(stderr, "SSL error: %s\n", qPrintable(error.errorString()));
 }
+#endif
 
-QString DownloadManager::buildUrl(const QString &name) {
+QString DownloadManager::buildUrl(const QString &name)
+{
     auto url = m_databaseURL + "/" + name;
     if (!m_idToken.isEmpty()) {
         if (!name.contains("?")) {

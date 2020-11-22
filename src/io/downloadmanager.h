@@ -1,36 +1,41 @@
 #ifndef DOWNLOADMANAGER_H
 #define DOWNLOADMANAGER_H
 
-#include <QObject>
+#include <memory>
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QJSValue>
 #include <QList>
 #include <QNetworkAccessManager>
-#include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QObject>
+#include <QSignalMapper>
+#ifndef QT_NO_SSL
 #include <QSslError>
+#endif
 #include <QStringList>
 #include <QTimer>
 #include <QUrl>
-#include <memory>
-#include <QJSValue>
-#include <QSignalMapper>
 
-struct DownloadData {
+struct DownloadData
+{
     QString filename;
     QJSValue callback;
 };
 
-class DownloadManager: public QObject
+class DownloadManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString idToken READ idToken WRITE setIdToken NOTIFY idTokenChanged)
     Q_PROPERTY(QString databaseURL READ databaseURL WRITE setDatabaseURL NOTIFY databaseURLChanged)
     Q_PROPERTY(QString authDomain READ authDomain WRITE setAuthDomain NOTIFY authDomainChanged)
     Q_PROPERTY(QString projectId READ projectId WRITE setProjectId NOTIFY projectIdChanged)
-    Q_PROPERTY(QString storageBucket READ storageBucket WRITE setStorageBucket NOTIFY storageBucketChanged)
-    Q_PROPERTY(QString messagingSenderId READ messagingSenderId WRITE setMessagingSenderId NOTIFY messagingSenderIdChanged)
+    Q_PROPERTY(
+        QString storageBucket READ storageBucket WRITE setStorageBucket NOTIFY storageBucketChanged)
+    Q_PROPERTY(QString messagingSenderId READ messagingSenderId WRITE setMessagingSenderId NOTIFY
+                   messagingSenderIdChanged)
     Q_PROPERTY(QString apiKey READ apiKey WRITE setApiKey NOTIFY apiKeyChanged)
 
 public:
@@ -39,8 +44,13 @@ public:
     Q_INVOKABLE void cachedDownload(const QString &objectName, QJSValue callback);
     Q_INVOKABLE void upload(const QString &objectName, const QUrl localUrl, QJSValue callback);
     Q_INVOKABLE void uploadText(const QString &objectName, const QString text, QJSValue callback);
-    void uploadData(const QString &objectName, const QByteArray data, const QByteArray contentType, std::function<void(const QString&)> callback);
-    void download(const QString &objectName, const QUrl &localUrl, std::function<void(void)> callback);
+    void uploadData(const QString &objectName,
+                    const QByteArray data,
+                    const QByteArray contentType,
+                    std::function<void(const QString &)> callback);
+    void download(const QString &objectName,
+                  const QUrl &localUrl,
+                  std::function<void(void)> callback);
 
     Q_INVOKABLE QString buildUrl(const QString &name);
 
@@ -71,14 +81,16 @@ signals:
     void apiKeyChanged(QString apiKey);
 
 private slots:
+#ifndef QT_NO_SSL
     void handleSslErrors(const QList<QSslError> &errors);
+#endif
 
 private:
     QNetworkAccessManager m_downloadManager;
     QNetworkAccessManager m_uploadManager;
     QNetworkAccessManager m_networkAccessManager;
-    QMap<QNetworkReply*, DownloadData> currentDownloads;
-    QMap<QNetworkReply*, QJSValue> currentUploads;
+    QMap<QNetworkReply *, DownloadData> currentDownloads;
+    QMap<QNetworkReply *, QJSValue> currentUploads;
     QString m_idToken;
     QString m_databaseURL;
     QString m_authDomain;

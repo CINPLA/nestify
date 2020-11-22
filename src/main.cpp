@@ -1,41 +1,42 @@
 #include <CuteVersioning/CuteVersioning>
 
+#include "core/edgebase.h"
+#include "core/edgeengine.h"
+#include "core/graphengine.h"
 #include "core/nodebase.h"
 #include "core/nodeengine.h"
-#include "core/edgebase.h"
-#include "core/graphengine.h"
-#include "core/edgeengine.h"
 
 #include "retina/kernel.h"
-#include "retina/kernels/gaborkernelengine.h"
 #include "retina/kernels/dogkernelengine.h"
+#include "retina/kernels/gaborkernelengine.h"
 #include "retina/kernels/rectangularkernelengine.h"
 
 #include "retina/retinaengine.h"
 #include "retina/retinapainter.h"
 #include "retina/videosurface.h"
 
-#include "neurons/neuronengine.h"
-#include "neurons/rateengine.h"
+#include "neurons/adaptationcurrent.h"
 #include "neurons/current.h"
 #include "neurons/leakcurrent.h"
-#include "neurons/adaptationcurrent.h"
+#include "neurons/neuronengine.h"
+#include "neurons/rateengine.h"
 
+#include "io/asyncfiledialog.h"
 #include "io/fileio.h" // TODO consider removing
-#include "io/standardpaths.h"
-#include "io/propertygroup.h"
 #include "io/neuronifyfile.h"
+#include "io/propertygroup.h"
+#include "io/standardpaths.h"
 
-//#include "io/downloadmanager.h"
+#include "io/downloadmanager.h"
 
 #include <QApplication>
+#include <QDebug>
 #include <QQmlApplicationEngine>
-#include <QTextStream>
-#include <QtQml>
 #include <QQmlContext>
 #include <QQuickView>
-#include <QDebug>
+#include <QTextStream>
 #include <QmlPreviewer>
+#include <QtQml>
 
 int main(int argc, char *argv[])
 {
@@ -47,8 +48,12 @@ int main(int argc, char *argv[])
     CuteVersioning::init();
 
     qmlRegisterSingletonType<FileIO>("Neuronify", 1, 0, "FileIO", &FileIO::qmlInstance);
-//    qmlRegisterSingletonType<NeuronifyFile>("Neuronify", 1, 0, "NeuronifyFile", &NeuronifyFile::qmlInstance);
-    qmlRegisterSingletonType<StandardPaths>("Neuronify", 1, 0, "StandardPaths", &StandardPaths::qmlInstance);
+    ////    qmlRegisterSingletonType<NeuronifyFile>("Neuronify", 1, 0, "NeuronifyFile", &NeuronifyFile::qmlInstance);
+    qmlRegisterSingletonType<StandardPaths>("Neuronify",
+                                            1,
+                                            0,
+                                            "StandardPaths",
+                                            &StandardPaths::qmlInstance);
 
     qmlRegisterType<NodeBase>("Neuronify", 1, 0, "NodeBase");
     qmlRegisterType<NodeEngine>("Neuronify", 1, 0, "NodeEngine");
@@ -58,13 +63,14 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<NeuronEngine>("Neuronify", 1, 0, "NeuronEngineBase");
 
-    qmlRegisterUncreatableType<AbstractKernelEngine>("Neuronify", 1, 0,
-                                               "AbstractKernelEngine",
-                                               "Derived classes need this");
+    qmlRegisterUncreatableType<AbstractKernelEngine>("Neuronify",
+                                                     1,
+                                                     0,
+                                                     "AbstractKernelEngine",
+                                                     "Derived classes need this");
     qmlRegisterType<GaborKernelEngine>("Neuronify", 1, 0, "GaborKernelEngine");
     qmlRegisterType<DogKernelEngine>("Neuronify", 1, 0, "DogKernelEngine");
-    qmlRegisterType<RectangularKernelEngine>("Neuronify", 1, 0,
-                                             "RectangularKernelEngine");
+    qmlRegisterType<RectangularKernelEngine>("Neuronify", 1, 0, "RectangularKernelEngine");
 
     qmlRegisterType<Kernel>("Neuronify", 1, 0, "Kernel");
     qmlRegisterType<RetinaEngine>("Neuronify", 1, 0, "RetinaEngine");
@@ -77,8 +83,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<RateEngine>("Neuronify", 1, 0, "RateEngine");
     qmlRegisterType<PropertyGroup>("Neuronify", 1, 0, "PropertyGroup");
-//    qmlRegisterType<DownloadManager>("Neuronify", 1, 0, "DownloadManager");
-
+    qmlRegisterType<AsyncFileDialog>("Neuronify", 1, 0, "AsyncFileDialog");
+    qmlRegisterType<DownloadManager>("Neuronify", 1, 0, "DownloadManager");
 
     QApplication app(argc, argv);
     app.setOrganizationName("Ovilab");
@@ -86,25 +92,25 @@ int main(int argc, char *argv[])
     app.setApplicationName("Neuronify");
 
     QQmlApplicationEngine engine;
-    QList<QUrl> neededPaths{
-        StandardPaths::writableLocation(StandardPaths::AppConfigLocation, "savedata"),
-        StandardPaths::writableLocation(StandardPaths::AppDataLocation, "community")
-    };
-    for(const auto &url : neededPaths) {
+    QList<QUrl> neededPaths{StandardPaths::writableLocation(StandardPaths::AppConfigLocation,
+                                                            "savedata"),
+                            StandardPaths::writableLocation(StandardPaths::AppDataLocation,
+                                                            "community")};
+    for (const auto &url : neededPaths) {
         qDebug() << "Verifying existense of" << url;
-        if(!QDir().mkpath(url.toLocalFile())) {
+        if (!QDir().mkpath(url.toLocalFile())) {
             qDebug() << "Could not create" << url;
             return 1;
         }
     }
 
-//    QmlPreviewer previewer(app);
-//    if(previewer.show()) {
-//        return previewer.exec();
-//    }
+    ////    QmlPreviewer previewer(app);
+    ////    if(previewer.show()) {
+    ////        return previewer.exec();
+    ////    }
 
     engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));
-    if(engine.rootObjects().size() > 0) {
+    if (engine.rootObjects().size() > 0) {
         QVariant qmlStartupTime = QQmlProperty::read(engine.rootObjects().first(), "startupTime");
         qDebug() << "Load time:" << qmlStartupTime.toDouble() - startupTime;
     }

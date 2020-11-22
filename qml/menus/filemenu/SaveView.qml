@@ -9,7 +9,7 @@ import QtQuick.Window 2.1
 import QtCharts 2.1
 import QtMultimedia 5.5
 import Qt.labs.settings 1.0
-import Qt.labs.platform 1.0
+//import Qt.labs.platform 1.0
 
 import Neuronify 1.0
 import CuteVersioning 1.0
@@ -29,67 +29,12 @@ import "qrc:/qml/ui"
 Item {
     id: saveRoot
 
-    signal saveRequested(var file)
+    signal saved()
+    required property FileManager fileManager
 
     Column {
         spacing: 16
         width: Math.min(480, parent.width)
-        
-        Label {
-            text: qsTr("Name:")
-        }
-        
-        TextField {
-            id: saveName
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            validator: RegExpValidator {
-                regExp: /[a-zA-Z0-9\-\_ ]+/
-            }
-            
-            placeholderText: "e.g. MySimulation"
-            
-            Binding {
-                target: saveName
-                property: "text"
-                when: currentSimulation ? true : false
-                value: currentSimulation ? currentSimulation.name : ""
-            }
-        }
-        
-        Label {
-            text: qsTr("Description:")
-        }
-        
-        TextArea {
-            id: saveDescription
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            placeholderText: "e.g. Illustrates the effect of feedback inhibition."
-            
-            Binding {
-                target: saveDescription
-                property: "text"
-                when: currentSimulation ? true : false
-                value: currentSimulation ? currentSimulation.description : ""
-            }
-        }
-        
-        Label {
-            text: "Screenshot preview:"
-        }
-        
-        ShaderEffectSource {
-            id: effectSource
-            readonly property real aspectRatio: neuronify.width / neuronify.height
-            width: parent.width * 0.6
-            height: width / aspectRatio
-            sourceItem: neuronify
-        }
         
         Button {
             anchors {
@@ -98,28 +43,18 @@ Item {
             
             Material.theme: Material.Light
             width: 120
-            enabled: saveName.acceptableInput
-            text: qsTr("Save")
+            text: qsTr("Save to computer")
             
             onClicked: {
-                saveDialog.open()
+                var result = fileManager.serializeState();
+                var fileString = JSON.stringify(result, null, 4);
+                saveDialog.saveFileContent(fileString);
+                saved();
             }
         }
-        
-        FileDialog {
+
+        AsyncFileDialog {
             id: saveDialog
-            fileMode: FileDialog.SaveFile
-            nameFilters: ["Neuronify files (*.neuronify)"]
-            defaultSuffix: ".neuronify"
-            onAccepted: {
-                var simulation = {
-                    file: file,
-                    name: saveName.text,
-                    description: saveDescription.text
-                }
-                
-                saveRequested(simulation)
-            }
         }
     }
 }

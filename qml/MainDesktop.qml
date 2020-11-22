@@ -46,24 +46,24 @@ Item {
         }
     }
 
-    function save(simulation, callback) {
-        currentSimulation = simulation
-        neuronify.save(simulation, callback)
+    function saveAs() {
+        var result = neuronify.fileManager.serializeState();
+        var fileString = JSON.stringify(result, null, 4);
+        fileDialog.saveFileContent(fileString);
+        neuronify.hasUnsavedChanges = false;
     }
 
-    function saveCurrentOrOpenDialog(callback) {
-        if(currentSimulation && currentSimulation.file) {
-            neuronify.save(currentSimulation, callback)
+    function runOrShowSaveDialog(action) {
+        if (neuronify.hasUnsavedChanges) {
+            unsavedDialog.openWithRequestedAction(action)
             return
         }
-        saveAs()
+        action()
     }
 
-    function saveAs() {
-        fileView.open("save")
-    }
 
     Component.onCompleted: {
+        console.log("MainDesktop loaded. Platform:", Qt.platform.os)
         firstLoadTimer.start()
     }
 
@@ -98,21 +98,17 @@ Item {
         property var requestedAction
 
         function openWithRequestedAction(action) {
-            requestedAction = action
-            open()
+            requestedAction = action;
+            open();
         }
 
         onYesClicked: {
-            saveCurrentOrOpenDialog(function() {
-                if (requestedAction) {
-                    requestedAction()
-                }
-            })
+            saveAs();
         }
         onNoClicked: {
-            ignoreUnsavedChanges = true
+            ignoreUnsavedChanges = true;
             if (requestedAction) {
-                requestedAction()
+                requestedAction();
             }
         }
 
@@ -122,9 +118,9 @@ Item {
         informativeText: "Do you want to save your changes?"
     }
 
-//    DownloadManager {
-//        id: _downloadManager
-//    }
+    DownloadManager {
+        id: _downloadManager
+    }
 
     Neuronify {
         id: neuronify
@@ -175,16 +171,14 @@ Item {
             fileView.open("new")
         }
 
-        onSaveRequested: {
-            saveCurrentOrOpenDialog()
+        onOpenRequested: {
+            runOrShowSaveDialog(function() {
+                fileDialog.getOpenFileContent()
+            });
         }
 
         onSaveAsRequested: {
             saveAs()
-        }
-
-        onOpenRequested: {
-            fileView.open("open")
         }
 
         onCommunityClicked: {
@@ -234,14 +228,7 @@ Item {
         revealed: false
         currentSimulation: root.currentSimulation
         z: 99
-
-        function runOrShowSaveDialog(action) {
-            if (neuronify.hasUnsavedChanges) {
-                unsavedDialog.openWithRequestedAction(action)
-                return
-            }
-            action()
-        }
+        fileManager: neuronify.fileManager
 
         onLoadRequested: {
             runOrShowSaveDialog(function() {
@@ -255,18 +242,6 @@ Item {
             runOrShowSaveDialog(function() {
                 root.currentSimulation = simulation
                 neuronify.open(simulation)
-                revealed = false
-            })
-        }
-
-        onSaveRequested: {
-            root.save(simulation)
-            revealed = false
-        }
-
-        onOpenRequested: {
-            runOrShowSaveDialog(function() {
-                root.open(file)
                 revealed = false
             })
         }
@@ -623,13 +598,20 @@ Item {
 
     Shortcut {
         sequence: StandardKey.Save
-        onActivated: root.saveCurrentOrOpenDialog()
+        onActivated: root.saveAs()
     }
 
     Shortcut {
         sequence: "Ctrl+Shift+S"
         onActivated: {
             root.saveAs()
+        }
+    }
+
+    AsyncFileDialog {
+        id: fileDialog
+        onContentRequested: {
+            neuronify.reloadState(contents)
         }
     }
 }

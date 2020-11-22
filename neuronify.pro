@@ -6,19 +6,19 @@ android {
     TARGET = Neuronify
 }
 
-#QMAKE_CXXFLAGS -= -O3
-#QMAKE_CXXFLAGS_DEBUG -= -O3
-#QMAKE_CXXFLAGS_RELEASE -= -O3
-#QMAKE_LFLAGS -= -O3
-#QMAKE_LFLAGS_DEBUG -= -O3
-#QMAKE_LFLAGS_RELEASE -= -O3
+# NOTE: Probably not needed, but the application appears more stable with it. Can most
+# likely be increased in the future
+QMAKE_WASM_PTHREAD_POOL_SIZE = 1
+# NOTE: Needed as workaround to error about initial memory size.
+QMAKE_WASM_TOTAL_MEMORY = 33554432
 
-QT += qml quick widgets multimedia multimediawidgets charts svg xml gui core
+QT += qml quick widgets multimedia multimediawidgets charts svg xml gui core network
 #QT += sql
 
 CONFIG += c++14 qtquickcompiler
 
 HEADERS += \
+    src/io/asyncfiledialog.h \
     src/io/fileio.h \
     src/core/graphengine.h \
     src/core/nodebase.h \
@@ -42,13 +42,15 @@ HEADERS += \
     src/io/propertygroup.h \
     src/retina/kernels/rectangularkernelengine.h \
     src/core/edgebase.h \
-    src/core/edgeengine.h
+    src/core/edgeengine.h \
+    src/io/downloadmanager.h
 
 #HEADERS += \
 #    src/io/neuronifyfile.h \
 #    src/io/downloadmanager.h
 
 SOURCES += \
+    src/io/asyncfiledialog.cpp \
     src/io/fileio.cpp \
     src/main.cpp \
     src/core/nodebase.cpp \
@@ -73,7 +75,8 @@ SOURCES += \
     src/io/propertygroup.cpp \
     src/retina/kernels/rectangularkernelengine.cpp \
     src/core/edgebase.cpp \
-    src/core/edgeengine.cpp
+    src/core/edgeengine.cpp \
+    src/io/downloadmanager.cpp
 
 #SOURCES += \
 #    src/io/neuronifyfile.cpp \

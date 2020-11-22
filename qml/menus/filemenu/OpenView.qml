@@ -9,8 +9,8 @@ import QtQuick.Window 2.1
 import QtCharts 2.1
 import QtMultimedia 5.5
 import Qt.labs.settings 1.0
-import Qt.labs.platform 1.0
 
+//import Qt.labs.platform 1.0
 import Neuronify 1.0
 import CuteVersioning 1.0
 import QtGraphicalEffects 1.0
@@ -29,66 +29,38 @@ import "qrc:/qml/ui"
 Item {
     id: openItem
 
-    signal openRequested(var file)
-    
+    signal requestOpenContentOrSaveCurrent(var callback)
+    signal openContent(var filename, var contents)
+
     Settings {
         id: savedataSettings
         property bool performed
         property url location
         category: "converted_saves"
     }
-    
+
     Column {
-        anchors  {
+        anchors {
             left: parent.left
             right: parent.right
         }
-        
+
         spacing: 16
         Button {
             Material.theme: Material.Light
             text: "From computer"
             onClicked: {
-                openDialog.open()
+                requestOpenContentOrSaveCurrent(function() {
+                    fileDialog.getOpenFileContent()
+                });
             }
         }
-        
-        Column {
-            anchors {
-                left: parent.left
-                right: parent.right
-            }
-            visible: savedataSettings.performed
-            Button {
-                Material.theme: Material.Light
-                text: "From older versions"
-                onClicked: {
-                    openDialog.open()
-                    openDialog.folder = savedataSettings.location
-                }
+
+        AsyncFileDialog {
+            id: fileDialog
+            onContentRequested: {
+                openContent(filename, contents)
             }
         }
-        
-        FileDialog {
-            id: openDialog
-            fileMode: FileDialog.OpenFile
-            nameFilters: ["Neuronify files (*.neuronify)"]
-            onAccepted: {
-                openRequested(file)
-            }
-        }
-        
-        // TODO Add recent once database is ready
-        
-        //                                FileMenuHeading {
-        //                                    text: "Recent"
-        //                                }
-        
-        //                                Flow {
-        //                                    anchors {
-        //                                        left: parent.left
-        //                                        right: parent.right
-        //                                    }
-        //                                }
     }
 }

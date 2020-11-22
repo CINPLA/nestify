@@ -106,10 +106,6 @@ ApplicationWindow {
         source: "qrc:/fonts/roboto/Roboto-Bold.ttf"
     }
 
-    FontLoader {
-        source: "https://github.com/google/material-design-icons/raw/master/iconfont/MaterialIcons-Regular.ttf"
-    }
-
     MainDesktop {
         id: mainDesktop
         anchors.fill: parent

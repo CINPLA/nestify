@@ -123,36 +123,6 @@ Rectangle {
         redoList.length = 0
     }
 
-    function save(simulation, callback) {
-        var aspectRatio = workspaceFlickable.width / workspaceFlickable.height;
-        var imageWidth = 512
-        var size = Qt.size(imageWidth, imageWidth / aspectRatio)
-        var result = fileManager.serializeState()
-        var fileString = JSON.stringify(result, null, 4)
-        var onSaved = function(grabResult) {
-            console.log("Saving simulation...")
-            NeuronifyFile.save(simulation.file, simulation.name, simulation.description, fileString, grabResult)
-            console.log("Save completed!")
-            hasUnsavedChanges = false
-            callback()
-        }
-        console.log("Grabbing screenshot...")
-        workspaceFlickable.grabToImage(onSaved, size)
-    }
-
-    function saveScreenshot(filename, callback) {
-        var aspectRatio = workspaceFlickable.width / workspaceFlickable.height;
-        var imageWidth = 512
-        var size = Qt.size(imageWidth, imageWidth / aspectRatio)
-        var onSaved = function(result) {
-            result.saveToFile(StandardPaths.toLocalFile(filename))
-            if(callback) {
-                callback()
-            }
-        }
-        workspaceFlickable.grabToImage(onSaved, size)
-    }
-
     function applyProperties(object, properties) {
         if(!object){
             console.warn("WARNING: apply properties got missing object: " + object)

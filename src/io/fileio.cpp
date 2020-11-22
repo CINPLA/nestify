@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QJSValue>
 #include <QQmlEngine>
+#include <QFileDialog>
 
 /*!
  * \class FileIO
@@ -106,6 +107,18 @@ bool FileIO::exists(const QUrl &fileUrl)
         return false;
     }
     return QFileInfo(fileUrl.toLocalFile()).exists();
+}
+
+void FileIO::getOpenFileContent(QJSValue callback) {
+    qDebug() << "Requesting open file contents" << callback.isCallable();
+    auto fileReady = [&callback](const QString &filename, const QByteArray &fileContents) {
+        qDebug() << "READY" << filename << fileContents << callback.isCallable();
+        if(!callback.isCallable()) {
+            return;
+        }
+        callback.call(QJSValueList{QJSValue(filename), QJSValue(QString(fileContents))});
+    };
+    QFileDialog::getOpenFileContent("*.*", fileReady);
 }
 
 QObject* FileIO::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine)

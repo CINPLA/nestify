@@ -21,6 +21,7 @@ public:
     Q_INVOKABLE static bool exists(const QUrl &fileUrl);
     Q_INVOKABLE static void makePath(const QUrl &path, QJSValue callback);
     Q_INVOKABLE static bool makePathSynchronously(const QUrl &path);
+    Q_INVOKABLE static void getOpenFileContent(QJSValue callback);
 
     static QObject *qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine);
 };
