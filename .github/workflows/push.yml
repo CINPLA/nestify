@@ -24,9 +24,11 @@ jobs:
           set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data\
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
-          xcopy /s "installer" "build\"
+          xcopy /s "installer" "build\installer"
           cd build
+          echo dir installer
           dir installer
+          echo dir installer\config
           dir installer\config
           qmake ..
           nmake
