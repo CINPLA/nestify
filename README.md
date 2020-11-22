@@ -3,6 +3,7 @@
 # Neuronify
 
 An educational neural network app using the integrate-and-fire method.
+A scientific description of the underlying computational model and the app can be found in the paper published in eNeuro: Dragly et al (2017) DOI: https://doi.org/10.1523/ENEURO.0022-17.2017
 
 ## Download Neuronify
 

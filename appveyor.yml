@@ -1,7 +1,14 @@
+image:
+  - Visual Studio 2017
 install:
-  - set QTDIR=C:\Qt\5.9\msvc2015_64
-  - set PATH=%PATH%;%QTDIR%\bin;C:\Qt\QtIFW2.0.1\bin
-  - call "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" x86_amd64
+  - set QTDIR=C:\Qt\5.13.2\msvc2017_64
+  - set QT_INSTALLER_FRAMEWORK_DIR=C:\Qt\Tools\QtInstallerFramework\3.1\bin
+  - set PATH=%PATH%;%QTDIR%\bin;%QT_INSTALLER_FRAMEWORK_DIR%;C:\Qt\QtIFW2.0.1\bin
+  - echo %QTDIR%
+  - dir %QTDIR%
+  - echo %QT_INSTALLER_FRAMEWORK_DIR%
+  - dir %QT_INSTALLER_FRAMEWORK_DIR%
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - cmd: pip.exe install conan
   - cmd: conan user
   - cmd: conan --version
@@ -14,8 +21,10 @@ build_script:
   - set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data
   - xcopy /s "release" "%INSTALLER_DIR%"
   - xcopy /s "%QTDIR%\qml" "%INSTALLER_DIR%"
-  - xcopy /s "%VS140COMNTOOLS%\..\..\VC\redist\x64\Microsoft.VC140.CRT" "%INSTALLER_DIR%"
-  - windeployqt.exe -quick -quickwidgets -multimediaquick -multimedia -opengl -quickparticles -quickwidgets -qmldir . "%INSTALLER_DIR%"
+  #- xcopy /s "%VS140COMNTOOLS%\..\..\VC\redist\x64\Microsoft.VC140.CRT" "%INSTALLER_DIR%"
+  #- windeployqt.exe -quick -quickwidgets -multimediaquick -multimedia -opengl -quickparticles -quickwidgets -qmldir . "%INSTALLER_DIR%"
+  - xcopy /s "%QTDIR%\bin\Qt5MultimediaQuick.dll" "%INSTALLER_DIR%"
+  - windeployqt.exe -quick -quickwidgets -multimedia -opengl -quickparticles -quickwidgets -qmldir . "%INSTALLER_DIR%"
   - binarycreator.exe -c installer/config/config.xml -p installer/packages neuronify-windows-installer
 artifacts:
   - path: neuronify-windows-installer.exe
@@ -33,4 +42,5 @@ deploy:
   draft: false
   prerelease: true
   on:
-    appveyor_repo_tag: true
+    branch: /release\/.+/
+    APPVEYOR_REPO_TAG: true
