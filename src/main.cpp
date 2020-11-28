@@ -48,7 +48,6 @@ int main(int argc, char *argv[])
     CuteVersioning::init();
 
     qmlRegisterSingletonType<FileIO>("Neuronify", 1, 0, "FileIO", &FileIO::qmlInstance);
-    ////    qmlRegisterSingletonType<NeuronifyFile>("Neuronify", 1, 0, "NeuronifyFile", &NeuronifyFile::qmlInstance);
     qmlRegisterSingletonType<StandardPaths>("Neuronify",
                                             1,
                                             0,
@@ -103,11 +102,6 @@ int main(int argc, char *argv[])
             return 1;
         }
     }
-
-    ////    QmlPreviewer previewer(app);
-    ////    if(previewer.show()) {
-    ////        return previewer.exec();
-    ////    }
 
     engine.load(QUrl(QStringLiteral("qrc:///qml/main.qml")));
     if (engine.rootObjects().size() > 0) {

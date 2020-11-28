@@ -4,10 +4,6 @@ import QtQuick 2.7
 import Qt.labs.settings 1.0
 import Neuronify 1.0
 
-//QtObject {
-
-//}
-
 DownloadManager {
     id: root
 

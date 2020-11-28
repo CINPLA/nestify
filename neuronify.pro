@@ -13,7 +13,6 @@ QMAKE_WASM_PTHREAD_POOL_SIZE = 1
 QMAKE_WASM_TOTAL_MEMORY = 33554432
 
 QT += qml quick widgets multimedia multimediawidgets charts svg xml gui core network
-#QT += sql
 
 CONFIG += c++14 qtquickcompiler
 
@@ -45,10 +44,6 @@ HEADERS += \
     src/core/edgeengine.h \
     src/io/downloadmanager.h
 
-#HEADERS += \
-#    src/io/neuronifyfile.h \
-#    src/io/downloadmanager.h
-
 SOURCES += \
     src/io/asyncfiledialog.cpp \
     src/io/fileio.cpp \
@@ -78,10 +73,14 @@ SOURCES += \
     src/core/edgeengine.cpp \
     src/io/downloadmanager.cpp
 
-#SOURCES += \
-#    src/io/neuronifyfile.cpp \
-#    src/io/downloadmanager.cpp
+!wasm {
+    QT += sql
+    HEADERS += \
+        src/io/neuronifyfile.h
 
+    SOURCES += \
+        src/io/neuronifyfile.cpp
+}
 
 RESOURCES += qml.qrc \
     images.qrc \

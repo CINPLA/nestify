@@ -1,16 +1,8 @@
 import QtGraphicalEffects 1.0
 import QtQuick 2.12
 
-//DropShadow {
-//    horizontalOffset: 1
-//    verticalOffset: 4
-//    radius: 10
-//    samples: 17
-//    color: Qt.rgba(0, 0, 0, 0.24)
-//    spread: 0.2
-//}
-
 Item {
+    // TODO remove this element or replace with something that works with WebAssembly
     property real samples
     property var source
     property real verticalOffset

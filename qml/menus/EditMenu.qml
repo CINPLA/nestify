@@ -15,7 +15,6 @@ import Neuronify 1.0
 import CuteVersioning 1.0
 import QtGraphicalEffects 1.0
 
-//import "qrc:/qml/backend"
 import "qrc:/qml/controls"
 import "qrc:/qml/hud"
 import "qrc:/qml/io"

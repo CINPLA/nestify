@@ -40,18 +40,6 @@ Node {
         fireAnimation.restart()
     }
 
-//    DropShadow {
-//        anchors.fill: image
-//        source: image
-//        smooth: true
-//        antialiasing: true
-//        samples: 17
-//        radius: 8
-//        horizontalOffset: 1
-//        verticalOffset: 4
-//        color: Qt.hsla(0.0, 0.0, 0.0, 0.2)
-//    }
-
     Image {
         id: image
         anchors.centerIn: parent

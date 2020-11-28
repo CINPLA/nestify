@@ -96,6 +96,8 @@
         <file>qml/ButtonColumnButton.qml</file>
         <file>qml/MainMobile.qml</file>
         <file>qml/MainDesktop.qml</file>
+        <file>qml/firebase/Firebase.qml</file>
+        <file>qml/firebase/qmldir</file>
         <file>qml/backend/Parse.qml</file>
         <file>qml/backend/qmldir</file>
         <file>qml/backend/Backend.qml</file>
@@ -113,8 +115,6 @@
         <file>qml/controls/NumberSlider.qml</file>
         <file>qml/menus/LeftMenuButton.qml</file>
         <file>qml/menus/EditMenu.qml</file>
-        <file>qml/menus/filemenu/OpenView.qml</file>
-        <file>qml/menus/filemenu/SaveView.qml</file>
         <file>qml/menus/filemenu/CommunityView.qml</file>
         <file>qml/menus/filemenu/UploadView.qml</file>
         <file>qml/menus/filemenu/AccountView.qml</file>

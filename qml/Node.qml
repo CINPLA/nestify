@@ -132,14 +132,12 @@ NodeBase {
         propagateComposedEvents: true
 
         onPressed: {
-            console.log("PRESSED")
             root.dragging = true
             dragStarted(root)
             mouse.accepted = true;
         }
 
         onClicked: {
-            console.log("PRESSED")
             root.clicked(root, mouse)
             mouse.accepted = true;
         }

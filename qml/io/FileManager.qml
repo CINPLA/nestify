@@ -119,16 +119,11 @@ Item {
             edgeList.push(edgeDump);
         }
 
-//        var workspaceProperties = workspace.dump();
-
         var result = {
             fileFormatVersion: 4,
             edges: edgeList,
             nodes: nodeList,
         };
-//        if(!filter) {
-//            result["workspace"] = workspaceProperties
-//        }
         return result
     }
 
