@@ -90,6 +90,10 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("net");
     app.setApplicationName("Neuronify");
 
+    QSurfaceFormat format;
+    format.setSamples(4);
+    QSurfaceFormat::setDefaultFormat(format);
+
     QQmlApplicationEngine engine;
     QList<QUrl> neededPaths{StandardPaths::writableLocation(StandardPaths::AppConfigLocation,
                                                             "savedata"),
