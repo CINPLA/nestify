@@ -9,6 +9,10 @@ jobs:
       matrix:
         os: [windows-latest, macOS-latest, ubuntu-16.04]
         version: ['5.15.1']
+        include:
+          - os: ubuntu-16.04
+            version: 5.15.1
+            arch: wasm_32
     steps:
       - name: Checkout
         uses: actions/checkout@v1
