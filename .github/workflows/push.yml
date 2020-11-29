@@ -19,7 +19,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          modules: "qtcharts qtmultimedia qtmultimediawidgets qtsql"
+          modules: "qtcharts qtmultimedia qtmultimediawidgets"
           tools: "tools_ifw,4.0,qt.tools.ifw.40"
       - name: Build on Windows
         if: startsWith(matrix.os, 'windows')
