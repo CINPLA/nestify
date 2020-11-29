@@ -1,0 +1,58 @@
+name: Build pushed commit
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macOS-latest, ubuntu-16.04]
+        version: ['5.15.1']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          modules: "qtcharts qtmultimedia qtmultimediawidgets qtsql"
+          tools: "tools_ifw,4.0,qt.tools.ifw.40"
+      - name: Build on Windows
+        if: startsWith(matrix.os, 'windows')
+        shell: cmd
+        run: |
+          set INSTALLER_DIR=installer\packages\net.ovilab.neuronify\data\
+          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          mkdir build
+          mkdir build\installer
+          xcopy /s installer\ build\installer\
+          cd build
+          qmake ..
+          nmake
+          xcopy /s "release" "%INSTALLER_DIR%"
+          xcopy /s "%Qt5_DIR%\qml" "%INSTALLER_DIR%"
+          xcopy /s "%Qt5_DIR%\bin\Qt5MultimediaQuick.dll" "%INSTALLER_DIR%"
+          windeployqt.exe -quick -quickwidgets -multimedia -opengl -quickparticles -quickwidgets -qmldir . %INSTALLER_DIR%
+      - name: Build on MacOS
+        if: startsWith(matrix.os, 'mac')
+        run: |
+          mkdir build
+          cd build
+          qmake ..
+          make
+          macdeployqt neuronify.app -qmldir=. -dmg
+          make clean
+      - name: Build on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          mkdir build
+          cp -r packaging build/
+          cd build
+          qmake ..
+          make
+          make clean
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: build

@@ -121,8 +121,7 @@ DISTFILES += \
     installer/packages/net.ovilab.neuronify/data/README.txt \
     .travis.yml \
     qml/backend/qmldir \
-    .travis/Dockerfile \
-    conanfile.txt
+    .travis/Dockerfile
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
@@ -152,11 +151,6 @@ macx {
     DISTFILES +=  \
     macos/icon.icns \
     macos/macos.plist
-}
-
-win32 {
-    CONFIG += conan_basic_setup
-    include(conanbuildinfo.pri)
 }
 
 WINRT_MANIFEST.name = Neuronify
