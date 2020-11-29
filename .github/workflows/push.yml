@@ -9,10 +9,12 @@ jobs:
       matrix:
         os: [windows-latest, macOS-latest, ubuntu-20.04]
         version: ['5.15.2']
+        dummy: [true]
         include:
           - os: ubuntu-20.04
             version: 5.15.2
             arch: wasm_32
+            dummy: false # needed to make sure this becomes an additional build
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -23,6 +25,11 @@ jobs:
           tools: "tools_ifw,4.0,qt.tools.ifw.40"
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
+      - name: Setup emsdk
+        if: startsWith(matrix.arch, 'wasm')
+        uses: mymindstorm/setup-emsdk@v7
+        with:
+          version: 1.39.8
       - name: Build on Windows
         if: startsWith(matrix.os, 'windows')
         shell: cmd
