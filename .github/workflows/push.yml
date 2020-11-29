@@ -8,10 +8,10 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macOS-latest, ubuntu-20.04]
-        version: ['5.15.1']
+        version: ['5.15.2']
         include:
           - os: ubuntu-20.04
-            version: 5.15.1
+            version: '5.15.2'
             arch: wasm_32
     steps:
       - name: Checkout
