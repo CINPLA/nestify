@@ -21,6 +21,8 @@ jobs:
         with:
           modules: "qtcharts qtmultimedia qtmultimediawidgets"
           tools: "tools_ifw,4.0,qt.tools.ifw.40"
+          version: ${{ matrix.version }}
+          arch: ${{ matrix.arch }}
       - name: Build on Windows
         if: startsWith(matrix.os, 'windows')
         shell: cmd
