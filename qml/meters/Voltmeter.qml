@@ -78,7 +78,9 @@ Node {
             const suffix = "csv";
             const sanitizedLabel = label.replace(' ', '_').replace(/\W/g, '');
             const componentLabel = sanitizedLabel.length > 0 ? sanitizedLabel : "voltmeter";
-            recorder.fileName = Qt.resolvedUrl(`${folder}/${prefix}-${componentLabel}.${suffix}`);
+            const filename = `${prefix}-${componentLabel}.${suffix}`;
+            fileDialog.filenameHint = filename;
+            recorder.fileName = Qt.resolvedUrl(`${folder}/${filename}`);
             recorder.start();
             voltmeterRoot.recordingState = recording;
         };
@@ -86,6 +88,11 @@ Node {
     }
 
     function stopRecording() {
+        if (voltmeterRoot.recordingState == recording) {
+            FileIO.read(recorder.fileName, contents => {
+                fileDialog.saveFileContent(contents);
+            });
+        }
         voltmeterRoot.recordingState = stopped;
     }
 
@@ -523,5 +530,9 @@ Node {
 
     Connector {
         color: Style.meter.border.color
+    }
+
+    AsyncFileDialog {
+        id: fileDialog
     }
 }

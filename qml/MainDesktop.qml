@@ -622,6 +622,7 @@ Item {
 
     AsyncFileDialog {
         id: fileDialog
+        filenameHint: "simulation.nfy"
         onContentRequested: {
             neuronify.reloadState(contents)
         }

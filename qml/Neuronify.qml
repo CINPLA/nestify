@@ -64,7 +64,7 @@ Rectangle {
     property bool autoPause: false
     property bool hasUnsavedChanges: true
     property var copiedState
-    property url recordingFolder
+    property url recordingFolder: StandardPaths.writableLocation(StandardPaths.CacheLocation, "recording")
 
     property bool applicationActive: {
         if(Qt.platform.os === "android" || Qt.platform.os === "ios") {
