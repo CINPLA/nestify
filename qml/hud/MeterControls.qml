@@ -1,12 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.2 as Dialogs
 
 import Neuronify 1.0
 
-import ".."
-import "../controls"
-import "../style"
+import "qrc:/qml"
+import "qrc:/qml/controls"
+import "qrc:/qml/style"
 
 /*!
     \qmltype MeterControls
@@ -31,6 +32,9 @@ PropertiesPage {
     property string unit: ""
     property string meterType: ""
 
+    signal recordPressed
+    signal stopPressed
+
     title: meterType
 
     onMeterChanged: {
@@ -38,6 +42,28 @@ PropertiesPage {
             return
         }
 
+    }
+
+    Label {
+        text: "Label:"
+        Layout.fillWidth: true
+    }
+
+    TextField {
+        id: labelField
+        Layout.fillWidth: true
+        text: meter.label
+        selectByMouse: true
+        Binding {
+            target: meter
+            property: "label"
+            value: labelField.text
+        }
+        Binding {
+            target: labelField
+            property: "text"
+            value: meter.label
+        }
     }
 
     BoundSlider {
@@ -58,13 +84,18 @@ PropertiesPage {
         maximumValue: meterControlsRoot.sliderMaximum
     }
 
-//    ConnectMultipleControl {
-//        toEnabled: false
-//        node: meter
-//    }
+    Text {
+        text: "Recording"
+    }
 
-//    ResetControl {
-//        engine: meterControlsRoot.engine
-//    }
+    Button {
+        text: "Record"
+        onPressed: recordPressed()
+    }
+
+    Button {
+        text: "Stop"
+        onPressed: stopPressed()
+    }
 }
 

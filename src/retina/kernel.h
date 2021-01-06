@@ -11,7 +11,7 @@
 #include "kernels/abstractkernelengine.h"
 #include "../core/neuronifyobject.h"
 
-using namespace std;
+using std::vector;
 
 class Kernel : public NeuronifyObject
 {

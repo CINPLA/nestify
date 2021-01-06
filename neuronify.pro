@@ -14,7 +14,7 @@ QMAKE_WASM_TOTAL_MEMORY = 33554432
 
 QT += qml quick widgets multimedia multimediawidgets charts svg xml gui core network
 
-CONFIG += c++14 qtquickcompiler
+CONFIG += c++17 qtquickcompiler
 
 HEADERS += \
     src/io/asyncfiledialog.h \

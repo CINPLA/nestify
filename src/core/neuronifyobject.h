@@ -15,10 +15,7 @@ class NeuronifyObject : public QQuickItem
 public:
     explicit NeuronifyObject(QQuickItem *parent = 0);
 
-    QQmlListProperty<PropertyGroup> savedProperties()
-    {
-        return QQmlListProperty<PropertyGroup>(this, m_savedProperties);
-    }
+    QQmlListProperty<PropertyGroup> savedProperties();
 
     void addSavedPropertyGroup(PropertyGroup *propertyGroup);
 

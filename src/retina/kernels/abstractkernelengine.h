@@ -7,8 +7,7 @@
 #include "../../core/neuronifyobject.h"
 #include "../../utility/mathhelper.h"
 
-using namespace std;
-
+using std::vector;
 
 class AbstractKernelEngine: public NeuronifyObject
 {

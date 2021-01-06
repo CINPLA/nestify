@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs 1.2 as Dialogs
 import QtQuick.Layouts 1.1
 import QtQuick.Particles 2.0
 import QtQuick.Window 2.1
@@ -63,6 +64,7 @@ Rectangle {
     property bool autoPause: false
     property bool hasUnsavedChanges: true
     property var copiedState
+    property url recordingFolder: StandardPaths.writableLocation(StandardPaths.CacheLocation, "recording")
 
     property bool applicationActive: {
         if(Qt.platform.os === "android" || Qt.platform.os === "ios") {
@@ -456,6 +458,20 @@ Rectangle {
     function raiseToTop(node) {
         highestZ += 1.0;
         node.z = highestZ;
+    }
+
+    function verifyRecordingFolder(callback) {
+        if (recordingFolder.toString().length > 0) {
+            callback(recordingFolder);
+            return;
+        }
+        if (recordingFileDialog.callback !== undefined) {
+            console.warn("ERROR: Recording file dialog already has a callback set. Aborting opening!")
+            return;
+        }
+
+        recordingFileDialog.callback = callback;
+        recordingFileDialog.visible = true;
     }
 
     function createEntity(fileUrl, properties) {
@@ -1112,4 +1128,15 @@ Rectangle {
         keys: ["lol"]
     }
 
+    Dialogs.FileDialog {
+        id: recordingFileDialog
+        property var callback: undefined
+        title: "Recording output folder"
+        selectFolder: true
+        onAccepted: {
+            root.recordingFolder = folder;
+            callback(folder);
+            callback = undefined;
+        }
+    }
 }

@@ -3,10 +3,9 @@
 #include <QDebug>
 #include <QFileDialog>
 
-AsyncFileDialog::AsyncFileDialog(QObject *parent) : QObject(parent)
-{
-
-}
+AsyncFileDialog::AsyncFileDialog(QObject *parent)
+    : QObject(parent)
+{}
 
 void AsyncFileDialog::getOpenFileContent()
 {
@@ -21,5 +20,5 @@ void AsyncFileDialog::getOpenFileContent()
 void AsyncFileDialog::saveFileContent(QString fileContents)
 {
     qDebug() << "Opening save dialog";
-    QFileDialog::saveFileContent(fileContents.toUtf8(), "simulation.nfy");
+    QFileDialog::saveFileContent(fileContents.toUtf8(), m_filenameHint);
 }

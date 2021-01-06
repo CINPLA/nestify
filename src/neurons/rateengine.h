@@ -8,7 +8,7 @@
 #include <vector>
 #include "../utility/mathhelper.h"
 
-using namespace std;
+using std::vector;
 
 class RateEngine : public NodeEngine
 {

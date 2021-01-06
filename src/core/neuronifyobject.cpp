@@ -4,6 +4,11 @@ NeuronifyObject::NeuronifyObject(QQuickItem *parent) : QQuickItem(parent)
 {
 }
 
+QQmlListProperty<PropertyGroup> NeuronifyObject::savedProperties()
+{
+    return QQmlListProperty<PropertyGroup>(this, &m_savedProperties);
+}
+
 void NeuronifyObject::addSavedPropertyGroup(PropertyGroup *propertyGroup)
 {
     m_savedProperties.append(propertyGroup);

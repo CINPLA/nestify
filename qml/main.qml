@@ -75,11 +75,13 @@ ApplicationWindow {
             close.accepted = false
             return
         }
-        if(!mainDesktop.tryClose()) {
-            close.accepted = false
-            return
-        }
-        console.log("Neuronify closing...")
+        const callback = () => {
+            console.log("Neuronify shutting down...");
+            Qt.quit();
+        };
+        mainDesktop.tryClose(callback);
+        close.accepted = false
+        return
     }
 
     function resetStyle() {
