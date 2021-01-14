@@ -156,8 +156,20 @@ Item {
                         signal refresh()
                         identifier: "community"
                         name: "Community"
-                        visible: Qt.platform.os !== "wasm"
 
+                        component: CommunityView {
+                            id: communityView
+
+                            Connections {
+                                target: communityItem
+                                onRefresh: communityView.refresh()
+                            }
+
+                            onItemClicked: {
+                                stackView.push(simulationComponent)
+                                stackView.currentItem.objectData = simulationData
+                            }
+                        }
                         Component {
                             id: simulationComponent
                             StoreSimulation {
@@ -205,11 +217,9 @@ Item {
                             }
                         }
                     }
-
                     FileMenuItem {
                         identifier: "account"
                         name: "Account"
-                        visible: Qt.platform.os !== "wasm"
                         component: AccountView {
                         }
                     }
