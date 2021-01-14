@@ -101,7 +101,6 @@ Rectangle {
             icon.category: "social"
             icon.name: "people"
             duration: 400
-            visible: Qt.platform.os !== "wasm"
             onClicked: {
                 communityClicked()
             }
@@ -172,7 +171,6 @@ Rectangle {
             text: "Account"
             icon.name: "account_circle"
             icon.category: "action"
-            visible: Qt.platform.os !== "wasm"
             duration: 250
             onClicked: {
                 accountClicked()
